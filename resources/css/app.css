@@ -1,0 +1,66 @@
+@import 'tailwindcss';
+@plugin 'daisyui';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source "../**/*.blade.php";
+@source "../**/*.js";
+@source "../**/*.vue";
+
+@theme {
+    --font-sans: 'Rajdhani', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Orbitron', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    --animate-reveal: reveal 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+    --animate-scan: scan 4s linear infinite;
+
+    @keyframes reveal {
+        0% {
+            opacity: 0;
+            transform: translateY(30px) scale(0.9);
+            filter: blur(10px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            filter: blur(0);
+        }
+    }
+
+    @keyframes scan {
+        0% { transform: translateY(-100%); }
+        100% { transform: translateY(100%); }
+    }
+}
+
+@utility cyber-glass {
+    background-color: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+}
+
+@utility cyber-glass-light {
+    background-color: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+@utility neon-border-cyan {
+    border-color: rgba(34, 211, 238, 0.4);
+    box-shadow: 0 0 15px rgba(34, 211, 238, 0.2);
+}
+
+@utility neon-border-magenta {
+    border-color: rgba(217, 70, 239, 0.4);
+    box-shadow: 0 0 15px rgba(217, 70, 239, 0.2);
+}
+
+@utility neon-text-cyan {
+    text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+}
+
+@utility neon-text-fuchsia {
+    text-shadow: 0 0 10px rgba(217, 70, 239, 0.5);
+}
