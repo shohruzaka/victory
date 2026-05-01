@@ -21,38 +21,43 @@ class SpeedRun extends Component
     public $showResult = false;
     public $timePerQuestion = 15; // 15 seconds per question
 
-    public $selectedSubject = null;
-    public $selectedTopic = null;
+    public $selectedSubjectId = null;
+    public $selectedTopicId = null;
+
+    public $currentQuestion = null;
+    public $currentOptions = [];
 
     public function mount()
     {
-        $this->selectedSubject = request('subject');
-        $this->selectedTopic = request('topic');
+        $this->selectedSubjectId = request('subject_id');
+        $this->selectedTopicId = request('topic_id');
 
         $query = Question::query();
 
-        if ($this->selectedSubject) {
-            $query->where('subject', $this->selectedSubject);
+        if ($this->selectedSubjectId) {
+            $query->whereHas('topic', function($q) {
+                $q->where('subject_id', $this->selectedSubjectId);
+            });
         }
 
-        if ($this->selectedTopic) {
-            $query->where('topic', $this->selectedTopic);
+        if ($this->selectedTopicId) {
+            $query->where('topic_id', $this->selectedTopicId);
         }
 
         $this->questionIds = $query->inRandomOrder()->limit(10)->pluck('id')->toArray();
         
         if (empty($this->questionIds)) {
             $this->isFinished = true;
+        } else {
+            $this->loadQuestion();
         }
     }
 
-    public function getQuestionProperty()
+    public function loadQuestion()
     {
-        if (!isset($this->questionIds[$this->currentIndex])) {
-            return null;
-        }
-
-        return Question::with('options')->find($this->questionIds[$this->currentIndex]);
+        $questionId = $this->questionIds[$this->currentIndex];
+        $this->currentQuestion = Question::with('options')->find($questionId);
+        $this->currentOptions = $this->currentQuestion->options->shuffle()->toArray();
     }
 
     public function answer($optionId, $timeLeft = 0)
@@ -60,16 +65,16 @@ class SpeedRun extends Component
         if ($this->showResult || $this->isFinished) return;
 
         $this->selectedOptionId = $optionId;
-        $question = $this->question;
-        $correctOption = $question->options->where('is_correct', true)->first();
-        $this->correctOptionId = $correctOption ? $correctOption->id : null;
+        
+        $correctOption = collect($this->currentOptions)->where('is_correct', true)->first();
+        $this->correctOptionId = $correctOption ? $correctOption['id'] : null;
 
         if ($optionId && $this->correctOptionId == $optionId) {
             $this->isCorrect = true;
             $this->score++;
             
             // Base XP
-            $earned = $question->points;
+            $earned = $this->currentQuestion->points;
             
             // Speed Bonus: 1 XP for every remaining second
             $bonus = (int) $timeLeft;
@@ -102,6 +107,7 @@ class SpeedRun extends Component
         if ($this->currentIndex >= count($this->questionIds)) {
             $this->finishGame();
         } else {
+            $this->loadQuestion();
             $this->dispatch('reset-timer');
         }
     }

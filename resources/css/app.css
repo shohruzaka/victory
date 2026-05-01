@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 @plugin 'daisyui';
 
+@custom-variant dark (&:where([data-theme="dark"] *));
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source "../**/*.blade.php";
@@ -35,16 +37,27 @@
 }
 
 @utility cyber-glass {
-    background-color: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+    background-color: white;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    
+    @variant dark {
+        background-color: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+    }
 }
 
 @utility cyber-glass-light {
-    background-color: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background-color: #f8fafc;
+    border: 1px solid #f1f5f9;
+    
+    @variant dark {
+        background-color: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
 }
 
 @utility neon-border-cyan {

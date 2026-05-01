@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizArena: Mode Comparison</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Rajdhani', sans-serif; }
+        .font-display { font-family: 'Orbitron', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        
+        /* Dark Mode Utilities (Matching project) */
+        .dark-mode .cyber-glass {
+            background-color: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        }
+        .dark-mode .neon-text-cyan {
+            text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+        }
+        
+        /* Minimalist Light Mode Utilities */
+        .light-mode .minimal-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+        }
+        .light-mode .minimal-card:hover {
+            border-color: #06b6d4;
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl font-bold mb-8 text-center text-gray-800">Minimalist Light Mode Concept</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            
+            <!-- CURRENT DARK MODE (REPLICA) -->
+            <div class="dark-mode bg-slate-950 p-8 rounded-xl border border-white/5 relative overflow-hidden">
+                <div class="absolute -top-10 -left-10 w-40 h-40 bg-cyan-500/10 blur-3xl"></div>
+                <div class="relative z-10">
+                    <div class="flex items-center gap-2 mb-8">
+                        <div class="w-8 h-8 bg-cyan-500 rounded flex items-center justify-center font-display font-black text-slate-950">Q</div>
+                        <span class="font-display font-bold text-xl tracking-tighter text-white">QUIZ<span class="text-fuchsia-500">ARENA</span></span>
+                    </div>
+                    
+                    <h2 class="font-display text-2xl font-black text-white mb-4 leading-none">LEVEL UP YOUR <span class="text-cyan-400 block neon-text-cyan italic">KNOWLEDGE</span></h2>
+                    
+                    <div class="cyber-glass p-4 mb-6">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-8 h-8 rounded bg-slate-800 flex items-center justify-center border border-white/10 text-cyan-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                            </div>
+                            <h3 class="font-display font-bold text-sm text-white uppercase tracking-wider">Speed Run</h3>
+                        </div>
+                        <p class="text-slate-400 text-xs">Race against the clock for maximum bonus XP.</p>
+                    </div>
+                    
+                    <button class="w-full py-3 bg-cyan-500 text-slate-950 font-display font-bold uppercase tracking-widest text-sm shadow-[0_0_20px_rgba(6,182,212,0.4)]">
+                        Start Game
+                    </button>
+                </div>
+                <div class="mt-4 text-center">
+                    <span class="text-[10px] font-mono text-slate-500 uppercase">Current: Cyberpunk_Dark</span>
+                </div>
+            </div>
+
+            <!-- PROPOSED MINIMALIST LIGHT MODE -->
+            <div class="light-mode bg-white p-8 rounded-xl border border-slate-200 shadow-sm">
+                <div class="relative z-10">
+                    <div class="flex items-center gap-2 mb-8">
+                        <div class="w-8 h-8 bg-slate-900 rounded flex items-center justify-center font-display font-black text-white">Q</div>
+                        <span class="font-display font-bold text-xl tracking-tighter text-slate-900">QUIZ<span class="text-slate-500">ARENA</span></span>
+                    </div>
+                    
+                    <h2 class="font-display text-2xl font-black text-slate-900 mb-4 leading-none">Level Up Your <span class="text-cyan-600 block italic">Knowledge</span></h2>
+                    
+                    <div class="minimal-card p-4 mb-6">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-8 h-8 rounded bg-slate-100 flex items-center justify-center border border-slate-200 text-cyan-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                            </div>
+                            <h3 class="font-display font-bold text-sm text-slate-800 uppercase tracking-wider">Speed Run</h3>
+                        </div>
+                        <p class="text-slate-600 text-xs">Race against the clock for maximum bonus XP.</p>
+                    </div>
+                    
+                    <button class="w-full py-3 bg-slate-900 text-white font-display font-bold uppercase tracking-widest text-sm hover:bg-slate-800 transition-colors">
+                        Start Game
+                    </button>
+                </div>
+                <div class="mt-4 text-center">
+                    <span class="text-[10px] font-mono text-slate-400 uppercase">Proposed: Minimalist_Light</span>
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="mt-12 bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
+            <h3 class="text-xl font-bold mb-4">Key Differences:</h3>
+            <ul class="space-y-2 text-slate-700">
+                <li class="flex items-center gap-2">
+                    <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                    <strong>Background:</strong> Removed dark gradients and noise. Pure white or very light gray.
+                </li>
+                <li class="flex items-center gap-2">
+                    <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                    <strong>Typography:</strong> Less neon glow, more focus on contrast and weight.
+                </li>
+                <li class="flex items-center gap-2">
+                    <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                    <strong>Cards:</strong> Replaced heavy blur (glassmorphism) with clean borders and subtle shadows.
+                </li>
+                <li class="flex items-center gap-2">
+                    <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                    <strong>Animations:</strong> Heavy "reveal" and "scan" effects can be replaced with simple fades or removed for speed.
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

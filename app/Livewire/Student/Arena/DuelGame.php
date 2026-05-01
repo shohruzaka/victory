@@ -24,6 +24,9 @@ class DuelGame extends Component
     public $isCorrect = null;
     public $correctOptionId = null;
 
+    public $currentQuestion = null;
+    public $currentOptions = [];
+
     public function mount($uuid)
     {
         $this->duel = Duel::where('uuid', $uuid)->firstOrFail();
@@ -40,39 +43,23 @@ class DuelGame extends Component
             $this->opponentScore = $this->duel->p1_score;
             $this->opponentIndex = $this->duel->p1_current_index;
         }
+
+        $this->loadQuestion();
     }
 
-    public function getListeners()
-    {
-        return [
-            "echo-private:duel.{$this->duel->uuid},DuelUpdated" => 'onDuelUpdated',
-        ];
-    }
-
-    public function onDuelUpdated($data)
-    {
-        $updatedDuel = Duel::find($data['duel']['id']);
-        
-        if (auth()->id() == $updatedDuel->player1_id) {
-            $this->opponentScore = $updatedDuel->p2_score;
-            $this->opponentIndex = $updatedDuel->p2_current_index;
-        } else {
-            $this->opponentScore = $updatedDuel->p1_score;
-            $this->opponentIndex = $updatedDuel->p1_current_index;
-        }
-
-        if ($updatedDuel->status === 'finished') {
-            $this->duel = $updatedDuel;
-            $this->isFinished = true;
-        }
-    }
-
-    public function getQuestionProperty()
+    public function loadQuestion()
     {
         $questionIds = $this->duel->question_ids;
-        if (!isset($questionIds[$this->currentIndex])) return null;
+        if (!isset($questionIds[$this->currentIndex])) {
+            $this->currentQuestion = null;
+            $this->currentOptions = [];
+            return;
+        }
 
-        return Question::with('options')->find($questionIds[$this->currentIndex]);
+        $this->currentQuestion = Question::with('options')->find($questionIds[$this->currentIndex]);
+        if ($this->currentQuestion) {
+            $this->currentOptions = $this->currentQuestion->options->shuffle()->toArray();
+        }
     }
 
     public function answer($optionId)
@@ -80,9 +67,9 @@ class DuelGame extends Component
         if ($this->showResult || $this->isFinished) return;
 
         $this->selectedOptionId = $optionId;
-        $question = $this->question;
-        $correctOption = $question->options->where('is_correct', true)->first();
-        $this->correctOptionId = $correctOption ? $correctOption->id : null;
+        
+        $correctOption = collect($this->currentOptions)->where('is_correct', true)->first();
+        $this->correctOptionId = $correctOption ? $correctOption['id'] : null;
 
         if ($this->correctOptionId == $optionId) {
             $this->isCorrect = true;
@@ -120,6 +107,8 @@ class DuelGame extends Component
 
         if ($this->currentIndex >= count($this->duel->question_ids)) {
             $this->checkFinish();
+        } else {
+            $this->loadQuestion();
         }
     }
 

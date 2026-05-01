@@ -4,6 +4,8 @@ namespace App\Livewire\Admin\Questions;
 
 use App\Models\Option;
 use App\Models\Question;
+use App\Models\Subject;
+use App\Models\Topic;
 use Livewire\Component;
 
 class Form extends Component
@@ -11,11 +13,14 @@ class Form extends Component
     public ?Question $question = null;
     
     public $text = '';
-    public $subject = '';
-    public $topic = '';
+    public $subject_id = '';
+    public $topic_id = '';
     public $difficulty = 'medium';
     public $points = 20;
     
+    public $subjects = [];
+    public $topics = [];
+
     public $options = [
         ['text' => '', 'is_correct' => true],
         ['text' => '', 'is_correct' => false],
@@ -25,14 +30,20 @@ class Form extends Component
 
     public function mount(?Question $question = null)
     {
+        $this->subjects = Subject::all();
+
         if ($question && $question->exists) {
             $this->question = $question;
             $this->text = $question->text;
-            $this->subject = $question->subject;
-            $this->topic = $question->topic;
+            $this->subject_id = $question->topic->subject_id ?? '';
+            $this->topic_id = $question->topic_id;
             $this->difficulty = $question->difficulty;
             $this->points = $question->points;
             
+            if ($this->subject_id) {
+                $this->topics = Topic::where('subject_id', $this->subject_id)->get();
+            }
+
             $this->options = $question->options->map(function($option) {
                 return [
                     'id' => $option->id,
@@ -40,6 +51,16 @@ class Form extends Component
                     'is_correct' => (bool) $option->is_correct,
                 ];
             })->toArray();
+        }
+    }
+
+    public function updatedSubjectId($value)
+    {
+        $this->topic_id = '';
+        if ($value) {
+            $this->topics = Topic::where('subject_id', $value)->get();
+        } else {
+            $this->topics = [];
         }
     }
 
@@ -70,8 +91,8 @@ class Form extends Component
     {
         $this->validate([
             'text' => 'required|min:5',
-            'subject' => 'required',
-            'topic' => 'nullable',
+            'subject_id' => 'required|exists:subjects,id',
+            'topic_id' => 'required|exists:topics,id',
             'difficulty' => 'required|in:easy,medium,hard',
             'points' => 'required|integer|min:1',
             'options' => 'required|array|min:2',
@@ -87,8 +108,7 @@ class Form extends Component
 
         $data = [
             'text' => $this->text,
-            'subject' => $this->subject,
-            'topic' => $this->topic,
+            'topic_id' => $this->topic_id,
             'difficulty' => $this->difficulty,
             'points' => $this->points,
         ];

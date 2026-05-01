@@ -26,31 +26,30 @@ class Settings extends Component
 
     public function save()
     {
-        $user = auth()->user();
+        $user = \App\Models\User::find(auth()->id());
 
-        $validated = $this->validate([
+        $this->validate([
             'name' => 'required|string|max:255',
             'group_name' => 'nullable|string|max:100',
             'avatar' => 'nullable|image|max:2048', // Max 2MB
         ]);
 
-        $data = [
-            'name' => $this->name,
-            'group_name' => $this->group_name,
-        ];
+        $user->name = $this->name;
+        $user->group_name = $this->group_name;
 
         if ($this->avatar) {
-            // Delete old avatar if exists
-            if ($user->avatar) {
+            // Delete old avatar if exists and is not a default/external URL
+            if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
                 Storage::disk('public')->delete($user->avatar);
             }
             
             $path = $this->avatar->store('avatars', 'public');
-            $data['avatar'] = $path;
+            $user->avatar = $path;
         }
 
-        $user->update($data);
+        $user->save();
 
+        // Refresh state
         $this->currentAvatar = $user->avatar_url;
         $this->avatar = null;
 

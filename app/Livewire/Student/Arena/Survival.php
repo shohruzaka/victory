@@ -20,22 +20,24 @@ class Survival extends Component
     public $correctOptionId = null;
     public $showResult = false;
 
-    public $selectedSubject = null;
-    public $selectedTopic = null;
+    public $selectedSubjectId = null;
+    public $selectedTopicId = null;
 
     public function mount()
     {
-        $this->selectedSubject = request('subject');
-        $this->selectedTopic = request('topic');
+        $this->selectedSubjectId = request('subject_id');
+        $this->selectedTopicId = request('topic_id');
 
         $query = Question::query();
 
-        if ($this->selectedSubject) {
-            $query->where('subject', $this->selectedSubject);
+        if ($this->selectedSubjectId) {
+            $query->whereHas('topic', function($q) {
+                $q->where('subject_id', $this->selectedSubjectId);
+            });
         }
 
-        if ($this->selectedTopic) {
-            $query->where('topic', $this->selectedTopic);
+        if ($this->selectedTopicId) {
+            $query->where('topic_id', $this->selectedTopicId);
         }
 
         $this->questionIds = $query->inRandomOrder()->pluck('id')->toArray();
