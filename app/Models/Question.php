@@ -14,6 +14,16 @@ class Question extends Model
 
     protected $fillable = ['text', 'topic_id', 'difficulty', 'points'];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Savol o'chganida barcha variantlarni (options) ham o'chirib yuborish
+        static::deleting(function ($question) {
+            $question->options()->delete();
+        });
+    }
+
     /**
      * Get points based on difficulty.
      */

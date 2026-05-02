@@ -4,27 +4,39 @@ namespace App\Livewire\Student\Arena;
 
 use App\Models\GameResult;
 use App\Models\Question;
+use App\Models\Subject;
 use Livewire\Component;
 
 class SpeedRun extends Component
 {
     public $questionIds = [];
+
     public $currentIndex = 0;
+
     public $score = 0;
+
     public $xpEarned = 0;
+
     public $bonusXp = 0;
+
     public $isFinished = false;
-    
+
     public $selectedOptionId = null;
+
     public $isCorrect = null;
+
     public $correctOptionId = null;
+
     public $showResult = false;
+
     public $timePerQuestion = 15; // 15 seconds per question
 
     public $selectedSubjectId = null;
+
     public $selectedTopicId = null;
 
     public $currentQuestion = null;
+
     public $currentOptions = [];
 
     public function mount()
@@ -35,7 +47,7 @@ class SpeedRun extends Component
         $query = Question::query();
 
         if ($this->selectedSubjectId) {
-            $query->whereHas('topic', function($q) {
+            $query->whereHas('topic', function ($q) {
                 $q->where('subject_id', $this->selectedSubjectId);
             });
         }
@@ -45,7 +57,7 @@ class SpeedRun extends Component
         }
 
         $this->questionIds = $query->inRandomOrder()->limit(10)->pluck('id')->toArray();
-        
+
         if (empty($this->questionIds)) {
             $this->isFinished = true;
         } else {
@@ -62,20 +74,22 @@ class SpeedRun extends Component
 
     public function answer($optionId, $timeLeft = 0)
     {
-        if ($this->showResult || $this->isFinished) return;
+        if ($this->showResult || $this->isFinished) {
+            return;
+        }
 
         $this->selectedOptionId = $optionId;
-        
+
         $correctOption = collect($this->currentOptions)->where('is_correct', true)->first();
         $this->correctOptionId = $correctOption ? $correctOption['id'] : null;
 
         if ($optionId && $this->correctOptionId == $optionId) {
             $this->isCorrect = true;
             $this->score++;
-            
+
             // Base XP
             $earned = $this->currentQuestion->points;
-            
+
             // Speed Bonus: 1 XP for every remaining second
             $bonus = (int) $timeLeft;
             $this->bonusXp += $bonus;
@@ -85,14 +99,16 @@ class SpeedRun extends Component
         }
 
         $this->showResult = true;
-        
+
         // Auto-advance after 1.5 seconds in Speed Run mode for faster flow
         $this->dispatch('start-next-timer');
     }
 
     public function timeout()
     {
-        if ($this->showResult || $this->isFinished) return;
+        if ($this->showResult || $this->isFinished) {
+            return;
+        }
         $this->answer(null, 0); // Trigger wrong answer on timeout
     }
 
@@ -117,9 +133,19 @@ class SpeedRun extends Component
         $this->isFinished = true;
         $user = auth()->user();
 
+        // Get subject name for category
+        $categoryName = 'Neural Matrix';
+        if ($this->selectedSubjectId) {
+            $subject = Subject::find($this->selectedSubjectId);
+            if ($subject) {
+                $categoryName = $subject->name;
+            }
+        }
+
         GameResult::create([
             'user_id' => $user->id,
             'mode' => 'speedrun',
+            'category' => $categoryName,
             'score' => $this->score,
             'total_questions' => count($this->questionIds),
             'xp_earned' => $this->xpEarned,

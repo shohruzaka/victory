@@ -4,23 +4,33 @@ namespace App\Livewire\Student\Arena;
 
 use App\Models\GameResult;
 use App\Models\Question;
+use App\Models\Subject;
 use Livewire\Component;
 
 class Survival extends Component
 {
     public $questionIds = [];
+
     public $currentIndex = 0;
+
     public $score = 0;
+
     public $xpEarned = 0;
+
     public $isFinished = false;
+
     public $reasonForFinish = ''; // "mistake" or "no_questions"
-    
+
     public $selectedOptionId = null;
+
     public $isCorrect = null;
+
     public $correctOptionId = null;
+
     public $showResult = false;
 
     public $selectedSubjectId = null;
+
     public $selectedTopicId = null;
 
     public function mount()
@@ -31,7 +41,7 @@ class Survival extends Component
         $query = Question::query();
 
         if ($this->selectedSubjectId) {
-            $query->whereHas('topic', function($q) {
+            $query->whereHas('topic', function ($q) {
                 $q->where('subject_id', $this->selectedSubjectId);
             });
         }
@@ -41,7 +51,7 @@ class Survival extends Component
         }
 
         $this->questionIds = $query->inRandomOrder()->pluck('id')->toArray();
-        
+
         if (empty($this->questionIds)) {
             $this->isFinished = true;
             $this->reasonForFinish = 'no_questions';
@@ -50,7 +60,7 @@ class Survival extends Component
 
     public function getQuestionProperty()
     {
-        if (!isset($this->questionIds[$this->currentIndex])) {
+        if (! isset($this->questionIds[$this->currentIndex])) {
             return null;
         }
 
@@ -59,7 +69,9 @@ class Survival extends Component
 
     public function answer($optionId)
     {
-        if ($this->showResult || $this->isFinished) return;
+        if ($this->showResult || $this->isFinished) {
+            return;
+        }
 
         $this->selectedOptionId = $optionId;
         $question = $this->question;
@@ -84,6 +96,7 @@ class Survival extends Component
     {
         if ($this->reasonForFinish === 'mistake') {
             $this->finishGame();
+
             return;
         }
 
@@ -102,10 +115,20 @@ class Survival extends Component
         $this->isFinished = true;
         $user = auth()->user();
 
+        // Get subject name for category
+        $categoryName = 'Neural Matrix';
+        if ($this->selectedSubjectId) {
+            $subject = Subject::find($this->selectedSubjectId);
+            if ($subject) {
+                $categoryName = $subject->name;
+            }
+        }
+
         // Save result
         GameResult::create([
             'user_id' => $user->id,
             'mode' => 'survival',
+            'category' => $categoryName,
             'score' => $this->score,
             'total_questions' => $this->currentIndex + 1,
             'xp_earned' => $this->xpEarned,
@@ -121,7 +144,11 @@ class Survival extends Component
 
     public function render()
     {
-        return view('livewire.student.arena.survival')
-            ->layout('components.layouts.student');
+        $question = $this->question;
+        
+        return view('livewire.student.arena.survival', [
+            'currentQuestion' => $question,
+            'currentOptions' => $question ? $question->options : []
+        ])->layout('components.layouts.student');
     }
 }

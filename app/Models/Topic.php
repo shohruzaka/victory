@@ -18,10 +18,18 @@ class Topic extends Model
     protected static function boot()
     {
         parent::boot();
+
         static::creating(function ($topic) {
-            if (!$topic->slug) {
+            if (! $topic->slug) {
                 $topic->slug = Str::slug($topic->name);
             }
+        });
+
+        // Kaskad o'chirish: Mavzu o'chganda barcha savollari ham o'chib ketishi uchun
+        static::deleting(function ($topic) {
+            $topic->questions->each(function ($question) {
+                $question->delete(); // Bu Question modelining o'z "deleting" hodisasini ham chaqiradi
+            });
         });
     }
 

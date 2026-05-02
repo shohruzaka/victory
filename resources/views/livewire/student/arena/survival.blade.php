@@ -66,9 +66,7 @@
                             <span class="badge badge-outline border-cyan-600/50 dark:border-cyan-500/50 text-cyan-700 dark:text-cyan-400 font-display text-[10px] uppercase tracking-tighter italic font-bold">Subject: {{ $currentQuestion['topic']['subject']['name'] ?? 'N/A' }}</span>
                             <span class="text-[10px] font-mono text-red-600 dark:text-red-400 font-bold">Risk Level: HIGH // +{{ $currentQuestion['points'] }} XP</span>
                         </div>
-                        <h3 class="text-xl md:text-2xl font-medium text-slate-900 dark:text-white leading-relaxed">
-                            {{ $currentQuestion['text'] }}
-                        </h3>
+                        <div class="text-lg md:text-xl font-medium text-slate-900 dark:text-white leading-relaxed whitespace-pre-wrap font-mono bg-slate-50 dark:bg-slate-900/50 p-4 rounded border border-slate-100 dark:border-white/5 shadow-inner">{{ $currentQuestion['text'] }}</div>
                     </div>
 
                     <!-- Options -->
@@ -97,7 +95,7 @@
                                 class="w-full text-left p-5 rounded-lg border-2 {{ $btnClass }} transition-all duration-300 flex items-center justify-between group relative overflow-hidden"
                                 {{ $showResult ? 'disabled' : '' }}
                             >
-                                <span class="relative z-10">{{ $option['text'] }}</span>
+                                <span class="relative z-10 font-mono text-xs md:text-sm">{{ $option['text'] }}</span>
                                 {!! $icon !!}
                             </button>
                         @endforeach

@@ -22,6 +22,10 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input): User
     {
+        if (! empty($input['neural_link_validation'])) {
+            abort(403, 'Bot detected.');
+        }
+
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'email' => [

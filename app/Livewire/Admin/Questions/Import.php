@@ -18,10 +18,13 @@ class Import extends Component
     use WithFileUploads;
 
     public $file;
-    public $subject = 'General';
-    public $topic = '';
+    public $subject_id = '';
+    public $topic_id = '';
     public $difficulty = 'medium';
     
+    public $subjects = [];
+    public $topics = [];
+
     public $previewId; // Cache key for preview data
     public $totalFound = 0;
     public $validCount = 0;
@@ -29,15 +32,32 @@ class Import extends Component
     
     public $successCount = 0;
 
+    public function mount()
+    {
+        $this->subjects = \App\Models\Subject::all();
+    }
+
+    public function updatedSubjectId($value)
+    {
+        $this->topic_id = '';
+        if ($value) {
+            $this->topics = \App\Models\Topic::where('subject_id', $value)->get();
+        } else {
+            $this->topics = [];
+        }
+    }
+
     public function downloadTemplate()
     {
         return Excel::download(new QuestionsTemplateExport, 'savollar_shabloni.xlsx');
     }
 
-    public function upload()
+    public function handleUpload()
     {
         $this->validate([
             'file' => 'required|max:10240', 
+            'subject_id' => 'required|exists:subjects,id',
+            'topic_id' => 'required|exists:topics,id',
         ]);
 
         $extension = $this->file->getClientOriginalExtension();
@@ -125,21 +145,24 @@ class Import extends Component
             if (empty($block)) continue;
 
             $parts = explode('====', $block);
-            $questionText = trim(array_shift($parts));
+            // Savol matnini olamiz va barcha ortiqcha bo'shliq/yangi qatorlarni boshidan-oxiridan olib tashlaymiz
+            $questionText = trim(array_shift($parts)); 
             
             $options = [];
             $correctLetter = '';
             $letters = ['A', 'B', 'C', 'D', 'E', 'F'];
 
             foreach ($parts as $index => $part) {
+                $part = trim($part); // Har bir variantni ham trim qilamiz
+                if (empty($part) && $index >= 2) continue; // Bo'sh variantlarni o'tkazib yuboramiz (agar kamida 2ta bo'lsa)
+                
                 if ($index >= count($letters)) break;
                 
-                $part = trim($part);
                 $isCorrect = str_starts_with($part, '#');
                 $optionText = $isCorrect ? ltrim($part, '#') : $part;
                 
                 $options[] = [
-                    'text' => trim($optionText),
+                    'text' => trim($optionText), // Variant matnini ham trim qilamiz
                     'letter' => $letters[$index]
                 ];
 
@@ -203,8 +226,7 @@ class Import extends Component
             foreach ($validItems as $item) {
                 $question = Question::create([
                     'text' => $item['text'],
-                    'subject' => $this->subject,
-                    'topic' => $this->topic,
+                    'topic_id' => $this->topic_id,
                     'difficulty' => $this->difficulty,
                     'points' => Question::getPointsByDifficulty($this->difficulty),
                 ]);

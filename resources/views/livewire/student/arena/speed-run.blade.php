@@ -106,9 +106,7 @@
                                 <span class="text-[10px] font-mono text-fuchsia-600 dark:text-fuchsia-400 font-bold" x-show="!paused">Potential Bonus: +<span x-text="timeLeft"></span> XP</span>
                             </div>
                         </div>
-                        <h3 class="text-xl md:text-2xl font-medium text-slate-900 dark:text-white leading-relaxed">
-                            {{ $currentQuestion['text'] }}
-                        </h3>
+                        <div class="text-lg md:text-xl font-medium text-slate-900 dark:text-white leading-relaxed whitespace-pre-wrap font-mono bg-slate-50 dark:bg-slate-900/50 p-4 rounded border border-slate-100 dark:border-white/5 shadow-inner">{{ $currentQuestion['text'] }}</div>
                     </div>
 
                     <!-- Options -->
@@ -139,7 +137,7 @@
                             >
                                 <span class="relative z-10 flex items-center gap-4">
                                     <span class="font-mono text-xs opacity-40">{{ chr(65 + $index) }}.</span>
-                                    {{ $option['text'] }}
+                                    <span class="font-mono text-xs md:text-sm">{{ $option['text'] }}</span>
                                 </span>
                                 {!! $icon !!}
                             </button>

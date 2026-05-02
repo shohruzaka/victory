@@ -20,15 +20,27 @@
                         </label>
                     </div>
                     
-                    <div class="relative group">
-                        <!-- Neon corner accents for the textarea -->
-                        <div class="absolute -top-1 -left-1 w-2 h-2 border-t border-l border-slate-300 dark:border-cyan-500/50 group-focus-within:border-cyan-600 dark:group-focus-within:border-cyan-500 transition-colors"></div>
-                        <div class="absolute -bottom-1 -right-1 w-2 h-2 border-b border-r border-slate-300 dark:border-cyan-500/50 group-focus-within:border-cyan-600 dark:group-focus-within:border-cyan-500 transition-colors"></div>
+                    <!-- Smart Monospace Textarea -->
+                    <div class="relative group" 
+                         x-data="{ 
+                            handleTab(e) {
+                                let el = e.target;
+                                let start = el.selectionStart;
+                                let end = el.selectionEnd;
+                                el.value = el.value.substring(0, start) + '    ' + el.value.substring(end);
+                                el.selectionStart = el.selectionEnd = start + 4;
+                            }
+                         }"
+                    >
+                        <div class="absolute -top-1 -left-1 w-2 h-2 border-t border-l border-slate-300 dark:border-cyan-500/50 group-focus-within:border-cyan-600 dark:group-focus-within:border-cyan-500 transition-colors z-10 pointer-events-none"></div>
+                        <div class="absolute -bottom-1 -right-1 w-2 h-2 border-b border-r border-slate-300 dark:border-cyan-500/50 group-focus-within:border-cyan-600 dark:group-focus-within:border-cyan-500 transition-colors z-10 pointer-events-none"></div>
                         
                         <textarea 
-                            wire:model="text" 
-                            class="textarea textarea-bordered w-full h-40 bg-slate-50 dark:bg-slate-900/80 border-slate-200 dark:border-white/5 text-slate-900 dark:text-cyan-400 focus:border-cyan-600/50 dark:focus:border-cyan-500/50 focus:outline-none font-mono text-base p-4 resize-none leading-relaxed transition-all" 
-                            placeholder="Tizimga savol matnini kiriting... (Masalan: C++ da 'virtual' kalit so'zi nima uchun ishlatiladi?)"
+                            wire:model="text"
+                            @keydown.tab.prevent="handleTab($event)"
+                            rows="8"
+                            class="textarea textarea-bordered w-full bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-white/5 text-slate-900 dark:text-cyan-400 font-mono text-sm p-4 focus:border-cyan-600 dark:focus:border-cyan-500 focus:outline-none transition-all duration-300 leading-relaxed"
+                            placeholder="Savol matnini kiriting... Tab tugmasi orqali kodlarni surishingiz mumkin."
                         ></textarea>
                     </div>
                     @error('text') <span class="text-red-500 text-[10px] font-mono uppercase tracking-tighter">{{ $message }}</span> @enderror
@@ -157,4 +169,3 @@
         </div>
     </form>
 </div>
-

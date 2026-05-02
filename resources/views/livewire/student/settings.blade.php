@@ -92,5 +92,52 @@
             </div>
         </div>
     </form>
+
+    <!-- Password Update Section -->
+    <div class="mt-12 space-y-6">
+        <h2 class="font-display text-xl font-bold uppercase tracking-widest text-slate-900 dark:text-white">
+            Security <span class="text-emerald-600 dark:text-emerald-400">Matrix</span>
+        </h2>
+
+        @if (session()->has('password_message'))
+            <div class="alert alert-success bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/50 text-emerald-700 dark:text-emerald-400 rounded-none font-mono text-xs">
+                {{ session('password_message') }}
+            </div>
+        @endif
+
+        <form wire:submit.prevent="updatePassword" class="cyber-glass p-8 border-l-4 border-emerald-600 dark:border-emerald-500 transition-all duration-300">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text font-display uppercase tracking-widest text-[10px] text-slate-500">Current Password (Joriy Parol)</span>
+                    </label>
+                    <input type="password" wire:model="current_password" class="input input-bordered bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-white/10 text-emerald-700 dark:text-emerald-400 focus:border-emerald-600 dark:focus:border-emerald-500 font-mono">
+                    @error('current_password') <span class="text-red-500 text-[10px] mt-1 font-mono uppercase">{{ $message }}</span> @enderror
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text font-display uppercase tracking-widest text-[10px] text-slate-500">New Password (Yangi Parol)</span>
+                    </label>
+                    <input type="password" wire:model="password" class="input input-bordered bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-white/10 text-emerald-700 dark:text-emerald-400 focus:border-emerald-600 dark:focus:border-emerald-500 font-mono">
+                    @error('password') <span class="text-red-500 text-[10px] mt-1 font-mono uppercase">{{ $message }}</span> @enderror
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text font-display uppercase tracking-widest text-[10px] text-slate-500">Confirm Password (Tasdiqlash)</span>
+                    </label>
+                    <input type="password" wire:model="password_confirmation" class="input input-bordered bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-white/10 text-emerald-700 dark:text-emerald-400 focus:border-emerald-600 dark:focus:border-emerald-500 font-mono">
+                </div>
+            </div>
+
+            <div class="pt-6 mt-6 border-t border-slate-100 dark:border-white/5">
+                <button type="submit" wire:loading.attr="disabled" class="btn w-full md:w-auto px-12 rounded-none border-2 border-emerald-600 dark:border-emerald-500 bg-emerald-600 dark:bg-emerald-500 text-white hover:bg-transparent hover:text-emerald-600 dark:hover:text-emerald-400 hover:border-emerald-600 dark:hover:border-emerald-500 transition-all font-display uppercase tracking-widest text-xs shadow-md dark:shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                    <span wire:loading.remove wire:target="updatePassword">Update_Security_Key</span>
+                    <span wire:loading wire:target="updatePassword">Processing...</span>
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 

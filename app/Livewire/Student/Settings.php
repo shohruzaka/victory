@@ -2,19 +2,31 @@
 
 namespace App\Livewire\Student;
 
+use App\Models\User;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
+use Laravel\Fortify\Contracts\UpdatesUserPasswords;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rule;
 
 class Settings extends Component
 {
     use WithFileUploads;
 
     public $name;
+
     public $group_name;
+
     public $avatar;
+
     public $currentAvatar;
+
+    // Password fields
+    public $current_password;
+
+    public $password;
+
+    public $password_confirmation;
 
     public function mount()
     {
@@ -26,7 +38,7 @@ class Settings extends Component
 
     public function save()
     {
-        $user = \App\Models\User::find(auth()->id());
+        $user = User::find(auth()->id());
 
         $this->validate([
             'name' => 'required|string|max:255',
@@ -42,7 +54,7 @@ class Settings extends Component
             if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
                 Storage::disk('public')->delete($user->avatar);
             }
-            
+
             $path = $this->avatar->store('avatars', 'public');
             $user->avatar = $path;
         }
@@ -54,6 +66,25 @@ class Settings extends Component
         $this->avatar = null;
 
         session()->flash('message', 'Profil sozlamalari muvaffaqiyatli yangilandi.');
+    }
+
+    public function updatePassword(UpdatesUserPasswords $updater)
+    {
+        $this->resetErrorBag();
+
+        try {
+            $updater->update(auth()->user(), [
+                'current_password' => $this->current_password,
+                'password' => $this->password,
+                'password_confirmation' => $this->password_confirmation,
+            ]);
+
+            $this->reset(['current_password', 'password', 'password_confirmation']);
+
+            session()->flash('password_message', 'Parol muvaffaqiyatli yangilandi.');
+        } catch (ValidationException $e) {
+            $this->setErrorBag($e->validator->errors());
+        }
     }
 
     public function render()

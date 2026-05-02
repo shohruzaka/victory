@@ -74,9 +74,7 @@
             <div class="cyber-glass p-8 md:p-12 space-y-12 animate-reveal transition-all duration-300" wire:key="question-{{ $currentIndex }}">
                 <div class="space-y-4">
                     <span class="badge badge-outline border-cyan-600/50 dark:border-cyan-500/50 text-cyan-700 dark:text-cyan-400 font-display text-[10px] uppercase tracking-tighter italic font-bold">Category: {{ $currentQuestion['category'] ?? 'Neural_Matrix' }}</span>
-                    <h3 class="text-xl md:text-2xl font-medium text-slate-900 dark:text-white leading-relaxed">
-                        {{ $currentQuestion['text'] }}
-                    </h3>
+                    <div class="text-lg md:text-xl font-medium text-slate-900 dark:text-white leading-relaxed whitespace-pre-wrap font-mono bg-slate-50 dark:bg-slate-900/50 p-4 rounded border border-slate-100 dark:border-white/5 shadow-inner">{{ $currentQuestion['text'] }}</div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -96,7 +94,7 @@
                             {{ $showResult ? 'disabled' : '' }}
                         >
                             <span class="font-mono text-xs opacity-40">{{ chr(65 + $index) }}.</span>
-                            {{ $option['text'] }}
+                            <span class="font-mono text-xs md:text-sm">{{ $option['text'] }}</span>
                         </button>
                     @endforeach
                 </div>

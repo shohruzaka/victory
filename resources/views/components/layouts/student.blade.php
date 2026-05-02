@@ -16,6 +16,53 @@
     <!-- Styles & Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+    @stack('styles')
+    <style>
+        .markdown-content pre {
+            background-color: rgba(15, 23, 42, 0.9);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            color: #22d3ee;
+            white-space: pre;
+        }
+        .dark .markdown-content pre {
+            background-color: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .markdown-content code {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: rgba(6, 182, 212, 0.1);
+            color: #0891b2;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-size: 0.9em;
+        }
+        .dark .markdown-content code {
+            background-color: rgba(34, 211, 238, 0.1);
+            color: #22d3ee;
+        }
+        .markdown-content pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            border-radius: 0;
+            font-size: inherit;
+        }
+        .markdown-content p {
+            margin-bottom: 1rem;
+        }
+        .markdown-content ul, .markdown-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+            list-style-type: disc;
+        }
+    </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-200 font-sans selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden transition-colors duration-300">
     <!-- Cyber Background -->
@@ -104,6 +151,7 @@
         </footer>
     </div>
 
+    @stack('scripts')
     @livewireScripts
 </body>
 </html>

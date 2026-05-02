@@ -25,6 +25,12 @@
             <form class="mt-8 space-y-6" action="{{ route('register') }}" method="POST">
                 @csrf
                 <div class="space-y-4">
+                    <!-- Honeypot: Hidden from humans, tempting for bots -->
+                    <div class="hidden" aria-hidden="true">
+                        <label for="neural_link_validation">Neural Link Validation</label>
+                        <input type="text" name="neural_link_validation" id="neural_link_validation" tabindex="-1" autocomplete="off">
+                    </div>
+
                     <div class="form-control">
                         <label class="label">
                             <span class="label-text font-display uppercase tracking-widest text-[10px] text-slate-500 font-bold">Alias (Full Name)</span>

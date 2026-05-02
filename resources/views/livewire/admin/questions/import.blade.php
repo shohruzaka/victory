@@ -25,20 +25,32 @@
                         </h3>
                     </div>
 
-                    <form wire:submit.prevent="parseImport" class="space-y-6">
+                    <form wire:submit.prevent="handleUpload" class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="form-control">
                                 <label class="label">
-                                    <span class="label-text font-display uppercase tracking-widest text-[10px] text-slate-500">Fan (Subject)</span>
+                                    <span class="label-text font-display uppercase tracking-widest text-[10px] text-slate-500 font-bold">Fan (Subject)</span>
                                 </label>
-                                <input type="text" wire:model="subject" class="input input-bordered bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-white/10 text-cyan-700 dark:text-cyan-400 focus:border-cyan-600 dark:focus:border-cyan-500 font-mono" placeholder="Masalan: Python">
+                                <select wire:model.live="subject_id" class="select select-bordered bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-white/10 text-cyan-700 dark:text-cyan-400 focus:border-cyan-600 dark:focus:border-cyan-500 font-mono">
+                                    <option value="">-- Fan Tanlang --</option>
+                                    @foreach($subjects as $subject)
+                                        <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('subject_id') <span class="text-red-500 text-[10px] mt-1 font-mono uppercase">{{ $message }}</span> @enderror
                             </div>
 
                             <div class="form-control">
                                 <label class="label">
-                                    <span class="label-text font-display uppercase tracking-widest text-[10px] text-slate-500">Mavzu (Topic)</span>
+                                    <span class="label-text font-display uppercase tracking-widest text-[10px] text-slate-500 font-bold">Mavzu (Topic)</span>
                                 </label>
-                                <input type="text" wire:model="topic" class="input input-bordered bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-white/10 text-cyan-700 dark:text-cyan-400 focus:border-cyan-600 dark:focus:border-cyan-500 font-mono" placeholder="Masalan: Lug'atlar (Ixtiyoriy)">
+                                <select wire:model="topic_id" class="select select-bordered bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-white/10 text-cyan-700 dark:text-cyan-400 focus:border-cyan-600 dark:focus:border-cyan-500 font-mono" {{ count($topics) === 0 ? 'disabled' : '' }}>
+                                    <option value="">-- Mavzu Tanlang --</option>
+                                    @foreach($topics as $topic)
+                                        <option value="{{ $topic->id }}">{{ $topic->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('topic_id') <span class="text-red-500 text-[10px] mt-1 font-mono uppercase">{{ $message }}</span> @enderror
                             </div>
                         </div>
 
@@ -58,23 +70,30 @@
                             </div>
                         </div>
 
-                        <div class="form-control">
+                        <div class="form-control" wire:key="file-upload-container">
                             <label class="label">
-                                <span class="label-text font-display uppercase tracking-widest text-[10px] text-slate-500">XLSX, DOCX yoki TXT Fayl</span>
+                                <span class="label-text font-display uppercase tracking-widest text-[10px] text-slate-500 font-bold">XLSX, DOCX yoki TXT Fayl</span>
                             </label>
                             <input type="file" wire:model="file" class="file-input file-input-bordered w-full bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-white/10 text-slate-700 dark:text-cyan-400 focus:border-cyan-600 dark:focus:border-cyan-500 font-mono text-sm" accept=".xlsx,.xls,.docx,.txt">
                             @error('file') <span class="text-red-500 text-[10px] mt-1 font-mono uppercase">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="pt-4">
-                            <button type="submit" class="btn btn-primary w-full rounded-none border-2 border-cyan-600 dark:border-cyan-400 bg-cyan-600 dark:bg-cyan-400 text-white dark:text-slate-950 hover:bg-transparent hover:text-cyan-600 dark:hover:text-cyan-400 hover:border-cyan-600 dark:hover:border-cyan-400 transition-all font-display uppercase tracking-widest text-xs shadow-md dark:shadow-[0_0_20px_rgba(6,182,212,0.3)]">
-                                <span wire:loading.remove wire:target="parseImport">Preview Questions</span>
-                                <span wire:loading wire:target="parseImport" class="flex items-center gap-2">
-                                    <svg class="animate-spin h-4 w-4" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
-                                    Parsing...
+                            <button type="submit" 
+                                    wire:loading.attr="disabled" 
+                                    wire:target="file, handleUpload"
+                                    class="btn btn-primary w-full rounded-none border-2 border-cyan-600 dark:border-cyan-400 bg-cyan-600 dark:bg-cyan-400 text-white dark:text-slate-950 hover:bg-transparent hover:text-cyan-600 dark:hover:text-cyan-400 hover:border-cyan-600 dark:hover:border-cyan-400 transition-all font-display uppercase tracking-widest text-xs shadow-md dark:shadow-[0_0_20px_rgba(6,182,212,0.3)] disabled:opacity-50 disabled:cursor-not-allowed">
+                                
+                                <span wire:loading.remove wire:target="file, handleUpload">Preview Questions</span>
+                                
+                                <span wire:loading wire:target="file" class="flex items-center gap-2">
+                                    <svg class="animate-spin h-4 w-4" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                    Uploading File...
+                                </span>
+
+                                <span wire:loading wire:target="handleUpload" class="flex items-center gap-2">
+                                    <svg class="animate-spin h-4 w-4" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                    Analyzing Content...
                                 </span>
                             </button>
                         </div>
@@ -177,4 +196,3 @@
         </div>
     @endif
 </div>
-

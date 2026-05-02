@@ -4,25 +4,35 @@ namespace App\Livewire\Student\Arena;
 
 use App\Models\GameResult;
 use App\Models\Question;
+use App\Models\Subject;
 use Livewire\Component;
 
 class Classic extends Component
 {
     public $questionIds = [];
+
     public $currentIndex = 0;
+
     public $score = 0;
+
     public $xpEarned = 0;
+
     public $isFinished = false;
-    
+
     public $selectedOptionId = null;
+
     public $isCorrect = null;
+
     public $correctOptionId = null;
+
     public $showResult = false;
 
     public $selectedSubjectId = null;
+
     public $selectedTopicId = null;
 
     public $currentQuestion = null;
+
     public $currentOptions = [];
 
     public function mount()
@@ -33,7 +43,7 @@ class Classic extends Component
         $query = Question::query();
 
         if ($this->selectedSubjectId) {
-            $query->whereHas('topic', function($q) {
+            $query->whereHas('topic', function ($q) {
                 $q->where('subject_id', $this->selectedSubjectId);
             });
         }
@@ -43,7 +53,7 @@ class Classic extends Component
         }
 
         $this->questionIds = $query->inRandomOrder()->limit(10)->pluck('id')->toArray();
-        
+
         if (empty($this->questionIds)) {
             $this->isFinished = true;
         } else {
@@ -60,10 +70,12 @@ class Classic extends Component
 
     public function answer($optionId)
     {
-        if ($this->showResult) return; // Prevent double answering
+        if ($this->showResult) {
+            return;
+        } // Prevent double answering
 
         $this->selectedOptionId = $optionId;
-        
+
         $correctOption = collect($this->currentOptions)->where('is_correct', true)->first();
         $this->correctOptionId = $correctOption ? $correctOption['id'] : null;
 
@@ -98,10 +110,20 @@ class Classic extends Component
         $this->isFinished = true;
         $user = auth()->user();
 
+        // Get subject name for category
+        $categoryName = 'Neural Matrix';
+        if ($this->selectedSubjectId) {
+            $subject = Subject::find($this->selectedSubjectId);
+            if ($subject) {
+                $categoryName = $subject->name;
+            }
+        }
+
         // Save game result
         GameResult::create([
             'user_id' => $user->id,
             'mode' => 'classic',
+            'category' => $categoryName,
             'score' => $this->score,
             'total_questions' => count($this->questionIds),
             'xp_earned' => $this->xpEarned,
@@ -109,7 +131,7 @@ class Classic extends Component
 
         // Add XP to user
         $user->increment('xp', $this->xpEarned);
-        
+
         // Recalculate level (simple logic: 1000 XP per level)
         $newLevel = floor($user->xp / 1000) + 1;
         if ($newLevel > $user->level) {

@@ -60,9 +60,7 @@
                             <span class="badge badge-outline border-fuchsia-600/50 dark:border-fuchsia-500/50 text-fuchsia-700 dark:text-fuchsia-400 font-display text-[10px] uppercase tracking-tighter italic font-bold">Category: Neural_Matrix</span>
                             <span class="text-[10px] font-mono text-cyan-700 dark:text-cyan-400 font-bold">+{{ $currentQuestion['points'] }} XP_Node</span>
                         </div>
-                        <h3 class="text-xl md:text-2xl font-medium text-slate-900 dark:text-white leading-relaxed">
-                            {{ $currentQuestion['text'] }}
-                        </h3>
+                        <div class="text-lg md:text-xl font-medium text-slate-900 dark:text-white leading-relaxed whitespace-pre-wrap font-mono bg-slate-50 dark:bg-slate-900/50 p-4 rounded border border-slate-100 dark:border-white/5 shadow-inner">{{ $currentQuestion['text'] }}</div>
                     </div>
 
                     <!-- Options -->
@@ -99,7 +97,7 @@
                                 @if(!$showResult)
                                     <div class="absolute inset-0 bg-gradient-to-r from-cyan-600/0 via-cyan-600/5 to-cyan-600/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                                 @endif
-                                <span class="relative z-10">{{ $option['text'] }}</span>
+                                <span class="relative z-10 font-mono text-xs md:text-sm">{{ $option['text'] }}</span>
                                 {!! $icon !!}
                             </button>
                         @endforeach
