@@ -64,7 +64,7 @@
                     <div class="space-y-4">
                         <div class="flex items-center justify-between">
                             <span class="badge badge-outline border-cyan-600/50 dark:border-cyan-500/50 text-cyan-700 dark:text-cyan-400 font-display text-[10px] uppercase tracking-tighter italic font-bold">Subject: {{ $currentQuestion['topic']['subject']['name'] ?? 'N/A' }}</span>
-                            <span class="text-[10px] font-mono text-red-600 dark:text-red-400 font-bold">Risk Level: HIGH // +{{ $currentQuestion['points'] }} XP</span>
+                            <span class="text-[10px] font-mono text-red-600 dark:text-red-400 font-bold">Risk Level: HIGH // +{{ $currentQuestion['points'] + ($currentIndex * 10) }} XP @if($currentIndex > 0) (Bonus: +{{ $currentIndex * 10 }}) @endif</span>
                         </div>
                         <div class="text-lg md:text-xl font-medium text-slate-900 dark:text-white leading-relaxed whitespace-pre-wrap font-mono bg-slate-50 dark:bg-slate-900/50 p-4 rounded border border-slate-100 dark:border-white/5 shadow-inner">{{ $currentQuestion['text'] }}</div>
                     </div>

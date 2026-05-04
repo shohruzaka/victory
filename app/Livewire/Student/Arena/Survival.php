@@ -81,7 +81,11 @@ class Survival extends Component
         if ($this->correctOptionId == $optionId) {
             $this->isCorrect = true;
             $this->score++;
-            $this->xpEarned += $question->points;
+            
+            // Progressive XP: Har bir keyingi savol uchun +10 XP bonus
+            $bonus = $this->currentIndex * 10;
+            $this->xpEarned += ($question->points + $bonus);
+            
             $this->showResult = true;
         } else {
             // One mistake ends the run!
