@@ -33,7 +33,7 @@ class SpeedRun extends Component
 
     public $showResult = false;
 
-    public $timePerQuestion = 15; // 15 seconds per question
+    public $timePerQuestion = 15;
 
     public $selectedSubjectId = null;
 
@@ -67,6 +67,7 @@ class SpeedRun extends Component
             $this->correctOptionId = $cached['correctOptionId'] ?? null;
             
             $this->instanceId = (string) Str::uuid();
+            $this->timePerQuestion = Cache::get('setting_speedrun_time', 15);
             $this->saveToCache();
         } else {
             $this->instanceId = (string) Str::uuid();
@@ -82,7 +83,9 @@ class SpeedRun extends Component
                 $query->where('topic_id', $this->selectedTopicId);
             }
 
-            $this->questionIds = $query->inRandomOrder()->limit(10)->pluck('id')->toArray();
+            $limit = Cache::get('setting_speedrun_limit', 10);
+            $this->timePerQuestion = Cache::get('setting_speedrun_time', 15);
+            $this->questionIds = $query->inRandomOrder()->limit($limit)->pluck('id')->toArray();
 
             if (!empty($this->questionIds)) {
                 $this->saveToCache();

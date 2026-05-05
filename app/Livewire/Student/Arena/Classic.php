@@ -78,7 +78,8 @@ class Classic extends Component
                 $query->where('topic_id', $this->selectedTopicId);
             }
 
-            $this->questionIds = $query->inRandomOrder()->limit(10)->pluck('id')->toArray();
+            $limit = \Illuminate\Support\Facades\Cache::get('setting_classic_limit', 10);
+            $this->questionIds = $query->inRandomOrder()->limit($limit)->pluck('id')->toArray();
 
             if (!empty($this->questionIds)) {
                 $this->saveToCache();

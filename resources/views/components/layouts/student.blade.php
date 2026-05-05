@@ -156,5 +156,23 @@
 
     @stack('scripts')
     @livewireScripts
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        window.addEventListener('swal', function (e) {
+            Swal.fire({
+                title: e.detail[0].title,
+                text: e.detail[0].text,
+                icon: e.detail[0].icon,
+                background: document.documentElement.dataset.theme === 'dark' ? '#0f172a' : '#ffffff',
+                color: document.documentElement.dataset.theme === 'dark' ? '#f1f5f9' : '#0f172a',
+                confirmButtonColor: '#0891b2',
+                customClass: {
+                    popup: 'cyber-glass-alert',
+                    title: 'font-display uppercase tracking-widest',
+                    htmlContainer: 'font-mono text-xs uppercase opacity-70'
+                }
+            });
+        });
+    </script>
 </body>
 </html>

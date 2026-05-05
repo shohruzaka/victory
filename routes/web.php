@@ -22,6 +22,7 @@ Route::middleware(['auth', 'throttle:arena'])->group(function () {
 
 Route::middleware(['auth', 'admin', 'throttle:admin'])->group(function () {
     Route::get('/admin', \App\Livewire\Admin\Dashboard::class)->name('admin.dashboard');
+    Route::get('/admin/settings', \App\Livewire\Admin\Settings::class)->name('admin.settings');
     Route::get('/admin/subjects', \App\Livewire\Admin\Subjects\Index::class)->name('admin.subjects.index');
     Route::get('/admin/students', \App\Livewire\Admin\Users\Index::class)->name('admin.users.index');
     Route::get('/admin/questions', \App\Livewire\Admin\Questions\Index::class)->name('admin.questions.index');
