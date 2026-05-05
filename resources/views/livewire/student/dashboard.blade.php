@@ -169,8 +169,7 @@
                     <tr>
                         <th class="p-4">Arena_Mode</th>
                         <th class="p-4">Accuracy / Opponent</th>
-                        <th class="p-4">Result</th>
-                        <th class="p-4">XP_Gain</th>
+                        <th class="p-4">Result / XP</th>
                         <th class="p-4">Timestamp</th>
                     </tr>
                 </thead>
@@ -192,23 +191,27 @@
                                     @endif
                                 </div>
                             </td>
-                            <td class="p-4 font-bold italic uppercase">
-                                @if($log->is_draw)
-                                    <span class="text-amber-600 dark:text-amber-400">Draw</span>
-                                @elseif($log->is_victory)
-                                    <span class="text-emerald-600 dark:text-emerald-400">Victory</span>
-                                @else
-                                    <span class="text-red-600 dark:text-red-400">Defeat</span>
-                                @endif
+                            <td class="p-4">
+                                <div class="flex flex-col">
+                                    <span class="font-bold italic uppercase">
+                                        @if($log->is_draw)
+                                            <span class="text-amber-600 dark:text-amber-400">Draw</span>
+                                        @elseif($log->is_victory)
+                                            <span class="text-emerald-600 dark:text-emerald-400">Victory</span>
+                                        @else
+                                            <span class="text-red-600 dark:text-red-400">Defeat</span>
+                                        @endif
+                                    </span>
+                                    <span class="text-[10px] font-mono text-cyan-700 dark:text-cyan-400 font-bold">
+                                        {{ $log->xp_earned > 0 ? '+' . $log->xp_earned : '0' }} XP
+                                    </span>
+                                </div>
                             </td>
-                            <td class="p-4 text-cyan-700 dark:text-cyan-400 font-mono font-bold">
-                                {{ $log->xp_earned > 0 ? '+' . $log->xp_earned : '0' }}
-                            </td>
-                            <td class="p-4 text-slate-500 font-mono">{{ $log->created_at->format('Y.m.d H:i') }}</td>
+                            <td class="p-4 text-slate-500 font-mono">{{ $log->created_at->format('m.d H:i') }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="p-12 text-center">
+                            <td colspan="4" class="p-12 text-center">
                                 <p class="text-[10px] font-mono text-slate-500 dark:text-slate-600 uppercase tracking-widest italic">No mission records found in the system</p>
                             </td>
                         </tr>

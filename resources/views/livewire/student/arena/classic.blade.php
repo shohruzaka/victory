@@ -91,14 +91,24 @@
                             <button 
                                 wire:key="option-{{ $option['id'] }}-{{ $currentIndex }}"
                                 @if(!$showResult) wire:click="answer({{ $option['id'] }})" @endif
+                                wire:loading.attr="disabled"
+                                wire:loading.class="opacity-75 cursor-wait"
                                 class="w-full text-left p-4 rounded-lg border-2 {{ $btnClass }} transition-all duration-300 flex items-center justify-between group relative overflow-hidden"
                                 {{ $showResult ? 'disabled' : '' }}
                             >
                                 @if(!$showResult)
                                     <div class="absolute inset-0 bg-gradient-to-r from-cyan-600/0 via-cyan-600/5 to-cyan-600/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                                 @endif
-                                <span class="relative z-10 font-mono text-xs md:text-sm">{{ $option['text'] }}</span>
-                                {!! $icon !!}
+                                <span class="relative z-10 font-mono text-xs md:text-sm" wire:loading.class="opacity-50">{{ $option['text'] }}</span>
+                                <span wire:loading.remove wire:target="answer({{ $option['id'] }})">
+                                    {!! $icon !!}
+                                </span>
+                                <span wire:loading wire:target="answer({{ $option['id'] }})" class="relative z-10">
+                                    <svg class="animate-spin h-4 w-4 text-cyan-500" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </span>
                             </button>
                         @endforeach
                     </div>
@@ -113,9 +123,18 @@
                                     <span class="font-display font-black text-red-600 dark:text-red-400 uppercase tracking-widest text-lg">Access <span class="text-slate-900 dark:text-white">Denied</span></span>
                                 @endif
                             </div>
-                            <button wire:click="nextQuestion" class="btn btn-outline {{ $isCorrect ? 'border-emerald-600 text-emerald-700 dark:border-emerald-500 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-500 dark:hover:text-slate-950' : 'border-cyan-600 text-cyan-700 dark:border-cyan-500 dark:text-cyan-400 hover:bg-cyan-600 hover:text-white dark:hover:bg-cyan-500 dark:hover:text-slate-950' }} rounded-none font-display uppercase tracking-widest text-xs px-8 transition-all">
-                                {{ $currentIndex + 1 >= count($questionIds) ? 'Finish Session' : 'Next Node' }}
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                            <button wire:click="nextQuestion" wire:loading.attr="disabled" class="btn btn-outline {{ $isCorrect ? 'border-emerald-600 text-emerald-700 dark:border-emerald-500 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-500 dark:hover:text-slate-950' : 'border-cyan-600 text-cyan-700 dark:border-cyan-500 dark:text-cyan-400 hover:bg-cyan-600 hover:text-white dark:hover:bg-cyan-500 dark:hover:text-slate-950' }} rounded-none font-display uppercase tracking-widest text-xs px-8 transition-all min-w-[160px] flex items-center justify-center">
+                                <span wire:loading.remove wire:target="nextQuestion" class="flex items-center">
+                                    {{ $currentIndex + 1 >= count($questionIds) ? 'Finish Session' : 'Next Node' }}
+                                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                                </span>
+                                <span wire:loading wire:target="nextQuestion" class="flex items-center gap-2">
+                                    <svg class="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Syncing...
+                                </span>
                             </button>
                         </div>
                     @endif

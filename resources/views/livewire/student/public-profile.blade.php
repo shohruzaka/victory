@@ -28,8 +28,15 @@
                         <span class="text-[9px] font-mono bg-cyan-600/10 text-cyan-600 dark:text-cyan-400 px-3 py-1 border border-cyan-600/20 uppercase font-bold tracking-widest italic">Identity_Verified</span>
                     @else
                         @livewire('student.challenge-action')
-                        <button wire:click="$dispatchTo('student.challenge-action', 'challenge', { opponentId: {{ $user->id }} })" class="btn btn-sm btn-primary rounded-none border-2 border-amber-600 dark:border-amber-500 bg-amber-600/10 text-amber-700 dark:text-amber-400 hover:bg-amber-600 hover:text-white dark:hover:bg-amber-500 dark:hover:text-slate-950 transition-all font-display uppercase tracking-widest text-[10px] shadow-[0_0_15px_rgba(245,158,11,0.2)]">
-                            Challenge_to_Duel ⚔️
+                        <button wire:click="$dispatchTo('student.challenge-action', 'challenge', { opponentId: {{ $user->id }} })" wire:loading.attr="disabled" class="btn btn-sm btn-primary rounded-none border-2 border-amber-600 dark:border-amber-500 bg-amber-600/10 text-amber-700 dark:text-amber-400 hover:bg-amber-600 hover:text-white dark:hover:bg-amber-500 dark:hover:text-slate-950 transition-all font-display uppercase tracking-widest text-[10px] shadow-[0_0_15px_rgba(245,158,11,0.2)] min-w-[140px] flex items-center justify-center">
+                            <span wire:loading.remove wire:target="$dispatchTo('student.challenge-action', 'challenge', { opponentId: {{ $user->id }} })">Challenge_to_Duel ⚔️</span>
+                            <span wire:loading wire:target="$dispatchTo('student.challenge-action', 'challenge', { opponentId: {{ $user->id }} })" class="flex items-center gap-2">
+                                <svg class="animate-spin h-3 w-3" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Transmitting...
+                            </span>
                         </button>
                     @endif
                 </div>

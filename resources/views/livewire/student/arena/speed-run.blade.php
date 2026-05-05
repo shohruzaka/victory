@@ -132,14 +132,24 @@
                             <button 
                                 wire:key="option-{{ $option['id'] }}-{{ $currentIndex }}"
                                 @if(!$showResult) x-on:click="$wire.answer({{ $option['id'] }}, timeLeft)" @endif
+                                wire:loading.attr="disabled"
+                                wire:loading.class="opacity-75 cursor-wait"
                                 class="w-full text-left p-5 rounded-lg border-2 {{ $btnClass }} transition-all duration-300 flex items-center justify-between group relative overflow-hidden"
                                 {{ $showResult ? 'disabled' : '' }}
                             >
-                                <span class="relative z-10 flex items-center gap-4">
+                                <span class="relative z-10 flex items-center gap-4" wire:loading.class="opacity-50">
                                     <span class="font-mono text-xs opacity-40">{{ chr(65 + $index) }}.</span>
                                     <span class="font-mono text-xs md:text-sm">{{ $option['text'] }}</span>
                                 </span>
-                                {!! $icon !!}
+                                <span wire:loading.remove wire:target="answer({{ $option['id'] }}, timeLeft)">
+                                    {!! $icon !!}
+                                </span>
+                                <span wire:loading wire:target="answer({{ $option['id'] }}, timeLeft)" class="relative z-10">
+                                    <svg class="animate-spin h-4 w-4 text-fuchsia-500" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </span>
                             </button>
                         @endforeach
                     </div>
@@ -157,9 +167,18 @@
                                     <span class="font-display font-black text-red-600 dark:text-red-400 uppercase tracking-widest text-lg">Sync Error</span>
                                 @endif
                             </div>
-                            <button wire:click="nextQuestion" class="btn btn-outline border-fuchsia-600 text-fuchsia-700 dark:border-fuchsia-500 dark:text-fuchsia-400 hover:bg-fuchsia-600 hover:text-white dark:hover:bg-fuchsia-500 dark:hover:text-slate-950 rounded-none font-display uppercase tracking-widest text-xs px-8 transition-all">
-                                {{ $currentIndex + 1 >= count($questionIds) ? 'Terminate Stream' : 'Next Node' }}
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                            <button wire:click="nextQuestion" wire:loading.attr="disabled" class="btn btn-outline border-fuchsia-600 text-fuchsia-700 dark:border-fuchsia-500 dark:text-fuchsia-400 hover:bg-fuchsia-600 hover:text-white dark:hover:bg-fuchsia-500 dark:hover:text-slate-950 rounded-none font-display uppercase tracking-widest text-xs px-8 transition-all min-w-[160px] flex items-center justify-center">
+                                <span wire:loading.remove wire:target="nextQuestion" class="flex items-center">
+                                    {{ $currentIndex + 1 >= count($questionIds) ? 'Terminate Stream' : 'Next Node' }}
+                                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                                </span>
+                                <span wire:loading wire:target="nextQuestion" class="flex items-center gap-2">
+                                    <svg class="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Syncing...
+                                </span>
                             </button>
                         </div>
                     @endif

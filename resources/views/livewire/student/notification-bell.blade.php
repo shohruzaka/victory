@@ -47,8 +47,32 @@
                             
                             @if(($notification->data['type'] ?? '') === 'duel_challenge')
                                 <div class="mt-3 flex gap-2">
-                                    <button wire:click="$dispatchTo('student.challenge-action', 'accept', { duelUuid: '{{ $notification->data['duel_uuid'] }}' })" class="px-3 py-1 bg-emerald-600/10 border border-emerald-600/30 text-emerald-600 text-[8px] font-mono font-bold uppercase hover:bg-emerald-600 hover:text-white transition-all">Accept_Duel</button>
-                                    <button wire:click="$dispatchTo('student.challenge-action', 'decline', { duelUuid: '{{ $notification->data['duel_uuid'] }}' })" class="px-3 py-1 bg-red-600/10 border border-red-600/30 text-red-600 text-[8px] font-mono font-bold uppercase hover:bg-red-600 hover:text-white transition-all">Decline</button>
+                                    <button 
+                                        wire:click="$dispatchTo('student.challenge-action', 'accept', { duelUuid: '{{ $notification->data['duel_uuid'] }}' })" 
+                                        wire:loading.attr="disabled"
+                                        class="px-3 py-1 bg-emerald-600/10 border border-emerald-600/30 text-emerald-600 text-[8px] font-mono font-bold uppercase hover:bg-emerald-600 hover:text-white transition-all flex items-center gap-2"
+                                    >
+                                        <span wire:loading.remove wire:target="$dispatchTo('student.challenge-action', 'accept', { duelUuid: '{{ $notification->data['duel_uuid'] }}' })">Accept_Duel</span>
+                                        <span wire:loading wire:target="$dispatchTo('student.challenge-action', 'accept', { duelUuid: '{{ $notification->data['duel_uuid'] }}' })">
+                                            <svg class="animate-spin h-2 w-2" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                        </span>
+                                    </button>
+                                    <button 
+                                        wire:click="$dispatchTo('student.challenge-action', 'decline', { duelUuid: '{{ $notification->data['duel_uuid'] }}' })" 
+                                        wire:loading.attr="disabled"
+                                        class="px-3 py-1 bg-red-600/10 border border-red-600/30 text-red-600 text-[8px] font-mono font-bold uppercase hover:bg-red-600 hover:text-white transition-all flex items-center gap-2"
+                                    >
+                                        <span wire:loading.remove wire:target="$dispatchTo('student.challenge-action', 'decline', { duelUuid: '{{ $notification->data['duel_uuid'] }}' })">Decline</span>
+                                        <span wire:loading wire:target="$dispatchTo('student.challenge-action', 'decline', { duelUuid: '{{ $notification->data['duel_uuid'] }}' })">
+                                            <svg class="animate-spin h-2 w-2" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                        </span>
+                                    </button>
                                 </div>
                             @endif
 
@@ -63,8 +87,18 @@
             @endforelse
         </div>
 
-        <div class="p-3 bg-slate-50/50 dark:bg-slate-900/30 text-center">
-            <a href="#" class="text-[9px] font-mono text-cyan-600 dark:text-cyan-400 hover:underline uppercase font-bold tracking-widest">Clear_All_Logs</a>
-        </div>
+        @if(count($notifications) > 0)
+            <div class="p-3 bg-slate-50/50 dark:bg-slate-900/30 text-center border-t border-slate-100 dark:border-white/5">
+                <button 
+                    wire:click="clearAll" 
+                    wire:loading.attr="disabled"
+                    class="text-[9px] font-mono text-cyan-600 dark:text-cyan-400 hover:underline uppercase font-bold tracking-widest flex items-center justify-center mx-auto gap-2 group"
+                >
+                    <span wire:loading.remove wire:target="clearAll">Clear_All_Logs</span>
+                    <span wire:loading wire:target="clearAll">Purging...</span>
+                    <svg wire:loading.remove wire:target="clearAll" class="w-3 h-3 text-slate-400 group-hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                </button>
+            </div>
+        @endif
     </div>
 </div>

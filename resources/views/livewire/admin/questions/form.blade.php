@@ -147,8 +147,17 @@
                 <h3 class="font-display text-xs font-bold uppercase tracking-[0.2em] text-slate-700 dark:text-white mb-4">Actions</h3>
                 
                 <div class="space-y-3">
-                    <button type="submit" class="btn btn-primary w-full rounded-none border-2 border-cyan-600 dark:border-cyan-400 bg-cyan-600 dark:bg-cyan-400 text-white dark:text-slate-950 hover:bg-transparent hover:text-cyan-600 dark:hover:text-cyan-400 hover:border-cyan-600 dark:hover:border-cyan-400 transition-all font-display uppercase tracking-widest text-xs shadow-md dark:shadow-[0_0_20px_rgba(6,182,212,0.3)]">
-                        {{ $question ? 'Update' : 'Generate' }} Question
+                    <button type="submit" wire:loading.attr="disabled" class="btn btn-primary w-full rounded-none border-2 border-cyan-600 dark:border-cyan-400 bg-cyan-600 dark:bg-cyan-400 text-white dark:text-slate-950 hover:bg-transparent hover:text-cyan-600 dark:hover:text-cyan-400 hover:border-cyan-600 dark:hover:border-cyan-400 transition-all font-display uppercase tracking-widest text-xs shadow-md dark:shadow-[0_0_20px_rgba(6,182,212,0.3)] flex items-center justify-center gap-2">
+                        <span wire:loading.remove wire:target="save">
+                            {{ $question ? 'Update' : 'Generate' }} Question
+                        </span>
+                        <span wire:loading wire:target="save" class="flex items-center gap-2">
+                            <svg class="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Syncing...
+                        </span>
                     </button>
                     <a href="{{ route('admin.questions.index') }}" class="btn btn-outline w-full rounded-none border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-display uppercase tracking-widest text-xs">
                         Cancel

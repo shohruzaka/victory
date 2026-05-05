@@ -44,6 +44,17 @@ class NotificationBell extends Component
         $this->loadNotifications();
     }
 
+    public function clearAll()
+    {
+        Auth::user()->notifications()->delete();
+        $this->loadNotifications();
+        $this->dispatch('swal', [
+            'title' => 'Logs Purged',
+            'text' => 'All neural notifications have been cleared from your system.',
+            'icon' => 'success'
+        ]);
+    }
+
     public function render()
     {
         return view('livewire.student.notification-bell');
