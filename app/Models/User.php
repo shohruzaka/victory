@@ -82,6 +82,11 @@ class User extends Authenticatable
         return $this->hasMany(GameResult::class);
     }
 
+    public function achievements(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Achievement::class)->withTimestamps();
+    }
+
     /**
      * Get the attributes that should be cast.
      *

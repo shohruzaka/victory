@@ -2,14 +2,23 @@
 
 namespace App\Livewire\Student;
 
+use App\Models\User;
 use App\Models\Duel;
+use App\Models\Achievement;
 use Livewire\Component;
 
-class Dashboard extends Component
+class PublicProfile extends Component
 {
+    public User $user;
+
+    public function mount($id)
+    {
+        $this->user = User::where('role', 'student')->findOrFail($id);
+    }
+
     public function render()
     {
-        $user = auth()->user();
+        $user = $this->user;
         
         $gameResults = $user->gameResults()
             ->latest()
@@ -65,17 +74,17 @@ class Dashboard extends Component
             $q->where('player1_id', $user->id)->orWhere('player2_id', $user->id);
         })->where('status', 'finished')->count();
 
-        $soloWins = $user->gameResults()->where('score', '>', 5)->count(); // 5 dan ko'p bo'lsa win deb hisoblaymiz (10 tadan)
+        $soloWins = $user->gameResults()->where('score', '>', 5)->count();
         $duelWins = Duel::where('winner_id', $user->id)->count();
 
         $winRate = $totalBattles > 0 
             ? round((($soloWins + $duelWins) / $totalBattles) * 100) 
             : 0;
 
-        $allAchievements = \App\Models\Achievement::all();
+        $allAchievements = Achievement::all();
         $userAchievements = $user->achievements()->pluck('achievement_id')->toArray();
 
-        return view('livewire.student.dashboard', [
+        return view('livewire.student.public-profile', [
             'recentLogs' => $recentLogs,
             'totalBattles' => $totalBattles,
             'winRate' => $winRate,

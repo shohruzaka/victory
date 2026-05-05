@@ -12,7 +12,19 @@ class Question extends Model
     /** @use HasFactory<\Database\Factories\QuestionFactory> */
     use HasFactory;
 
-    protected $fillable = ['text', 'topic_id', 'difficulty', 'points'];
+    protected $fillable = ['text', 'topic_id', 'difficulty', 'points', 'total_attempts', 'correct_attempts'];
+
+    /**
+     * Get the failure percentage.
+     */
+    public function getErrorRateAttribute(): float
+    {
+        if ($this->total_attempts === 0) {
+            return 0;
+        }
+
+        return round((($this->total_attempts - $this->correct_attempts) / $this->total_attempts) * 100, 2);
+    }
 
     protected static function boot()
     {

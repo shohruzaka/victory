@@ -12,6 +12,7 @@ use Livewire\Attributes\On;
 class DuelGame extends Component
 {
     public Duel $duel;
+    public $instanceId;
     public $currentIndex = 0;
     public $score = 0;
     public $isFinished = false;
@@ -31,6 +32,10 @@ class DuelGame extends Component
     {
         $this->duel = Duel::where('uuid', $uuid)->firstOrFail();
         
+        // Multi-tab himoyasi
+        $this->instanceId = (string) \Illuminate\Support\Str::uuid();
+        \Illuminate\Support\Facades\Cache::put('duel_instance_' . $this->duel->id . '_' . auth()->id(), $this->instanceId, now()->addHours(1));
+
         // Kim p1 va kim p2 ekanligini aniqlash
         if (auth()->id() == $this->duel->player1_id) {
             $this->score = $this->duel->p1_score;
@@ -62,11 +67,31 @@ class DuelGame extends Component
         }
     }
 
+    protected function validateSession()
+    {
+        $cachedId = \Illuminate\Support\Facades\Cache::get('duel_instance_' . $this->duel->id . '_' . auth()->id());
+        
+        if ($cachedId && $cachedId !== $this->instanceId) {
+            $this->dispatch('swal', [
+                'title' => 'Sessiya eskirgan!',
+                'text' => 'Ushbu duel boshqa oynada faollashgan.',
+                'icon' => 'warning'
+            ]);
+            return false;
+        }
+        
+        return true;
+    }
+
     public function answer($optionId)
     {
+        if (!$this->validateSession()) return;
         if ($this->showResult || $this->isFinished) return;
 
         $this->selectedOptionId = $optionId;
+        
+        // Statistika: Umumiy urinishlarni oshiramiz
+        $this->currentQuestion->increment('total_attempts');
         
         $correctOption = collect($this->currentOptions)->where('is_correct', true)->first();
         $this->correctOptionId = $correctOption ? $correctOption['id'] : null;
@@ -74,6 +99,9 @@ class DuelGame extends Component
         if ($this->correctOptionId == $optionId) {
             $this->isCorrect = true;
             $this->score++;
+
+            // Statistika: To'g'ri javoblar urinishini oshiramiz
+            $this->currentQuestion->increment('correct_attempts');
         } else {
             $this->isCorrect = false;
         }
@@ -92,6 +120,8 @@ class DuelGame extends Component
 
     public function nextQuestion()
     {
+        if (!$this->validateSession()) return;
+
         $this->currentIndex++;
         $this->showResult = false;
         $this->selectedOptionId = null;
@@ -129,12 +159,57 @@ class DuelGame extends Component
                 'winner_id' => $winnerId
             ]);
 
-            // XP berish
+            // XP berish va xabarnoma yuborish
             if ($winnerId) {
-                User::find($winnerId)->increment('xp', 200); // G'olibga 200 XP
+                $winner = User::find($winnerId);
+                $winner->increment('xp', 200); // G'olibga 200 XP
+                $winner->notify(new \App\Notifications\DuelFinishedNotification($duel, 'victory'));
+                \App\Services\AchievementService::check($winner);
+
+                $loserId = ($winnerId == $duel->player1_id) ? $duel->player2_id : $duel->player1_id;
+                if ($loserId) {
+                    $loser = User::find($loserId);
+                    $loser->notify(new \App\Notifications\DuelFinishedNotification($duel, 'defeat'));
+                    \App\Services\AchievementService::check($loser);
+                }
+            } else {
+                // Durang (Draw)
+                $p1 = User::find($duel->player1_id);
+                $p2 = User::find($duel->player2_id);
+                $p1->notify(new \App\Notifications\DuelFinishedNotification($duel, 'draw'));
+                $p2->notify(new \App\Notifications\DuelFinishedNotification($duel, 'draw'));
+                \App\Services\AchievementService::check($p1);
+                \App\Services\AchievementService::check($p2);
             }
-            
+
             broadcast(new DuelUpdated($duel));
+        }
+    }
+
+    public function getListeners()
+    {
+        return [
+            "echo-private:duel.{$this->duel->uuid},DuelUpdated" => 'onDuelUpdated',
+        ];
+    }
+
+    public function onDuelUpdated($data)
+    {
+        // Raqibdan kelgan ma'lumotlarni yuklaymiz
+        $duelData = $data['duel'];
+        
+        if (auth()->id() == $duelData['player1_id']) {
+            $this->opponentScore = $duelData['p2_score'];
+            $this->opponentIndex = $duelData['p2_current_index'];
+        } else {
+            $this->opponentScore = $duelData['p1_score'];
+            $this->opponentIndex = $duelData['p1_current_index'];
+        }
+
+        // Agar duel tugagan bo'lsa (baza orqali tekshiramiz)
+        if (isset($duelData['status']) && $duelData['status'] === 'finished') {
+            $this->duel->refresh();
+            $this->isFinished = true;
         }
     }
 

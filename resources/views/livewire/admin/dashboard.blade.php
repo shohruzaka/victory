@@ -10,18 +10,19 @@
         </div>
 
         <div class="cyber-glass p-6 border-l-4 border-fuchsia-600 dark:border-fuchsia-500 transition-all duration-300">
-            <p class="text-[10px] font-mono text-slate-500 uppercase tracking-[0.2em] mb-1">Active_Quizzes</p>
+            <p class="text-[10px] font-mono text-slate-500 uppercase tracking-[0.2em] mb-1">Arena_Games</p>
             <div class="flex items-end gap-2">
-                <span class="text-3xl font-display font-black text-slate-900 dark:text-white">12</span>
-                <span class="text-xs text-fuchsia-600 dark:text-fuchsia-500 font-mono mb-1">Live</span>
+                <span class="text-3xl font-display font-black text-slate-900 dark:text-white">{{ $this->stats['totalGames'] }}</span>
+                <span class="text-xs text-fuchsia-600 dark:text-fuchsia-500 font-mono mb-1">Total</span>
             </div>
+            <p class="text-[9px] font-mono text-slate-400 mt-2">AVG_SCORE: {{ $this->stats['avgScore'] }}</p>
         </div>
 
         <div class="cyber-glass p-6 border-l-4 border-emerald-600 dark:border-emerald-500 transition-all duration-300">
-            <p class="text-[10px] font-mono text-slate-500 uppercase tracking-[0.2em] mb-1">Duels_Today</p>
+            <p class="text-[10px] font-mono text-slate-500 uppercase tracking-[0.2em] mb-1">Completed_Duels</p>
             <div class="flex items-end gap-2">
-                <span class="text-3xl font-display font-black text-slate-900 dark:text-white">48</span>
-                <span class="text-xs text-emerald-600 dark:text-emerald-500 font-mono mb-1">Completed</span>
+                <span class="text-3xl font-display font-black text-slate-900 dark:text-white">{{ $this->stats['totalDuels'] }}</span>
+                <span class="text-xs text-emerald-600 dark:text-emerald-500 font-mono mb-1">PvP</span>
             </div>
         </div>
 
@@ -39,20 +40,19 @@
         <div class="space-y-4">
             <h3 class="font-display text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Recent <span class="text-cyan-600 dark:text-cyan-400">Activity</span></h3>
             <div class="cyber-glass-light overflow-hidden transition-all duration-300">
-                <div class="p-4 border-b border-slate-100 dark:border-white/5 flex justify-between items-center hover:bg-slate-50 dark:hover:bg-white/5 transition-all">
-                    <div class="flex items-center gap-3">
-                        <div class="w-2 h-2 rounded-full bg-cyan-600 dark:bg-cyan-500"></div>
-                        <span class="text-xs text-slate-800 dark:text-white">New user registered: <span class="text-cyan-600 dark:text-cyan-400 font-medium">Student_X</span></span>
+                @forelse($this->activities as $activity)
+                    <div class="p-4 border-b border-slate-100 dark:border-white/5 flex justify-between items-center hover:bg-slate-50 dark:hover:bg-white/5 transition-all">
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 rounded-full {{ $activity['color'] }}"></div>
+                            <span class="text-xs text-slate-800 dark:text-white truncate max-w-xs">{!! $activity['message'] !!}</span>
+                        </div>
+                        <span class="text-[9px] font-mono text-slate-400 dark:text-slate-500 uppercase shrink-0">{{ $activity['time']->diffForHumans(null, true) }} AGO</span>
                     </div>
-                    <span class="text-[10px] font-mono text-slate-400 dark:text-slate-500">5M AGO</span>
-                </div>
-                <div class="p-4 border-b border-slate-100 dark:border-white/5 flex justify-between items-center hover:bg-slate-50 dark:hover:bg-white/5 transition-all">
-                    <div class="flex items-center gap-3">
-                        <div class="w-2 h-2 rounded-full bg-fuchsia-600 dark:bg-fuchsia-500"></div>
-                        <span class="text-xs text-slate-800 dark:text-white">Quiz "OOP Basics" updated by <span class="text-fuchsia-600 dark:text-fuchsia-400 font-medium">Admin</span></span>
+                @empty
+                    <div class="p-8 text-center">
+                        <p class="text-[10px] font-mono text-slate-500 uppercase tracking-widest">No recent neural activity found</p>
                     </div>
-                    <span class="text-[10px] font-mono text-slate-400 dark:text-slate-500">1H AGO</span>
-                </div>
+                @endforelse
             </div>
         </div>
 
@@ -61,20 +61,20 @@
             <div class="cyber-glass-light p-6 space-y-6 transition-all duration-300">
                 <div class="space-y-2">
                     <div class="flex justify-between text-[10px] font-mono uppercase tracking-widest">
-                        <span class="text-slate-500">Server Load</span>
-                        <span class="text-cyan-600 dark:text-cyan-400 font-bold">24%</span>
+                        <span class="text-slate-500">Hard Questions Load</span>
+                        <span class="text-red-600 dark:text-red-400 font-bold">{{ $this->systemStatus['hard_percent'] }}%</span>
                     </div>
                     <div class="h-1.5 w-full bg-slate-100 dark:bg-slate-900 rounded-full overflow-hidden">
-                        <div class="h-full bg-cyan-600 dark:bg-cyan-500 w-[24%] shadow-sm dark:shadow-[0_0_10px_rgba(6,182,212,0.5)]"></div>
+                        <div class="h-full bg-red-600 dark:bg-red-500 shadow-sm dark:shadow-[0_0_10px_rgba(220,38,38,0.5)]" style="width: {{ $this->systemStatus['hard_percent'] }}%"></div>
                     </div>
                 </div>
                 <div class="space-y-2">
                     <div class="flex justify-between text-[10px] font-mono uppercase tracking-widest">
-                        <span class="text-slate-500">Memory Usage</span>
-                        <span class="text-fuchsia-600 dark:text-fuchsia-400 font-bold">68%</span>
+                        <span class="text-slate-500">Beginner Friendliness</span>
+                        <span class="text-emerald-600 dark:text-emerald-400 font-bold">{{ $this->systemStatus['easy_percent'] }}%</span>
                     </div>
                     <div class="h-1.5 w-full bg-slate-100 dark:bg-slate-900 rounded-full overflow-hidden">
-                        <div class="h-full bg-fuchsia-600 dark:bg-fuchsia-500 w-[68%] shadow-sm dark:shadow-[0_0_10px_rgba(217,70,239,0.5)]"></div>
+                        <div class="h-full bg-emerald-600 dark:bg-emerald-500 shadow-sm dark:shadow-[0_0_10px_rgba(16,185,129,0.5)]" style="width: {{ $this->systemStatus['easy_percent'] }}%"></div>
                     </div>
                 </div>
             </div>

@@ -5,6 +5,9 @@
         </h2>
         
         <div class="flex gap-3">
+            <a href="{{ route('admin.questions.statistics') }}" class="btn btn-outline rounded-none border-amber-600/50 dark:border-amber-500/50 text-amber-700 dark:text-amber-500 hover:bg-amber-600 hover:text-white dark:hover:bg-amber-500 dark:hover:text-slate-950 transition-all font-display uppercase tracking-widest text-xs">
+                Statistika
+            </a>
             <a href="{{ route('admin.questions.import') }}" class="btn btn-outline rounded-none border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-white/5 transition-all font-display uppercase tracking-widest text-xs">
                 DOCX / Excel Import
             </a>

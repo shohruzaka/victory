@@ -5,10 +5,14 @@ namespace App\Livewire\Student\Arena;
 use App\Models\GameResult;
 use App\Models\Question;
 use App\Models\Subject;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class SpeedRun extends Component
 {
+    public $instanceId;
+
     public $questionIds = [];
 
     public $currentIndex = 0;
@@ -44,25 +48,68 @@ class SpeedRun extends Component
         $this->selectedSubjectId = request('subject_id');
         $this->selectedTopicId = request('topic_id');
 
-        $query = Question::query();
+        $cacheKey = 'arena_speedrun_' . auth()->id();
+        $cached = Cache::get($cacheKey);
 
-        if ($this->selectedSubjectId) {
-            $query->whereHas('topic', function ($q) {
-                $q->where('subject_id', $this->selectedSubjectId);
-            });
+        if ($cached && 
+            $cached['subject_id'] == $this->selectedSubjectId && 
+            $cached['topic_id'] == $this->selectedTopicId &&
+            $cached['currentIndex'] < count($cached['questionIds'])) {
+            
+            $this->questionIds = $cached['questionIds'];
+            $this->currentIndex = $cached['currentIndex'];
+            $this->score = $cached['score'];
+            $this->xpEarned = $cached['xpEarned'];
+            $this->bonusXp = $cached['bonusXp'] ?? 0;
+            $this->showResult = $cached['showResult'] ?? false;
+            $this->selectedOptionId = $cached['selectedOptionId'] ?? null;
+            $this->isCorrect = $cached['isCorrect'] ?? null;
+            $this->correctOptionId = $cached['correctOptionId'] ?? null;
+            
+            $this->instanceId = (string) Str::uuid();
+            $this->saveToCache();
+        } else {
+            $this->instanceId = (string) Str::uuid();
+            $query = Question::query();
+
+            if ($this->selectedSubjectId) {
+                $query->whereHas('topic', function ($q) {
+                    $q->where('subject_id', $this->selectedSubjectId);
+                });
+            }
+
+            if ($this->selectedTopicId) {
+                $query->where('topic_id', $this->selectedTopicId);
+            }
+
+            $this->questionIds = $query->inRandomOrder()->limit(10)->pluck('id')->toArray();
+
+            if (!empty($this->questionIds)) {
+                $this->saveToCache();
+            }
         }
-
-        if ($this->selectedTopicId) {
-            $query->where('topic_id', $this->selectedTopicId);
-        }
-
-        $this->questionIds = $query->inRandomOrder()->limit(10)->pluck('id')->toArray();
 
         if (empty($this->questionIds)) {
             $this->isFinished = true;
         } else {
             $this->loadQuestion();
         }
+    }
+
+    protected function validateSession()
+    {
+        $cached = Cache::get('arena_speedrun_' . auth()->id());
+        
+        if ($cached && isset($cached['instanceId']) && $cached['instanceId'] !== $this->instanceId) {
+            $this->dispatch('swal', [
+                'title' => 'Sessiya eskirgan!',
+                'text' => 'Boshqa oynada test faollashgan. Davom etish uchun sahifani yangilang.',
+                'icon' => 'warning'
+            ]);
+            return false;
+        }
+        
+        return true;
     }
 
     public function loadQuestion()
@@ -74,11 +121,18 @@ class SpeedRun extends Component
 
     public function answer($optionId, $timeLeft = 0)
     {
+        if (!$this->validateSession()) {
+            return;
+        }
+
         if ($this->showResult || $this->isFinished) {
             return;
         }
 
         $this->selectedOptionId = $optionId;
+
+        // Statistika: Umumiy urinishlarni oshiramiz
+        $this->currentQuestion->increment('total_attempts');
 
         $correctOption = collect($this->currentOptions)->where('is_correct', true)->first();
         $this->correctOptionId = $correctOption ? $correctOption['id'] : null;
@@ -86,6 +140,9 @@ class SpeedRun extends Component
         if ($optionId && $this->correctOptionId == $optionId) {
             $this->isCorrect = true;
             $this->score++;
+
+            // Statistika: To'g'ri javoblar urinishini oshiramiz
+            $this->currentQuestion->increment('correct_attempts');
 
             // Base XP
             $earned = $this->currentQuestion->points;
@@ -99,6 +156,7 @@ class SpeedRun extends Component
         }
 
         $this->showResult = true;
+        $this->saveToCache();
 
         // Auto-advance after 1.5 seconds in Speed Run mode for faster flow
         $this->dispatch('start-next-timer');
@@ -106,6 +164,10 @@ class SpeedRun extends Component
 
     public function timeout()
     {
+        if (!$this->validateSession()) {
+            return;
+        }
+
         if ($this->showResult || $this->isFinished) {
             return;
         }
@@ -114,6 +176,10 @@ class SpeedRun extends Component
 
     public function nextQuestion()
     {
+        if (!$this->validateSession()) {
+            return;
+        }
+
         $this->currentIndex++;
         $this->showResult = false;
         $this->selectedOptionId = null;
@@ -124,13 +190,33 @@ class SpeedRun extends Component
             $this->finishGame();
         } else {
             $this->loadQuestion();
+            $this->saveToCache();
             $this->dispatch('reset-timer');
         }
+    }
+
+    protected function saveToCache()
+    {
+        Cache::put('arena_speedrun_' . auth()->id(), [
+            'instanceId' => $this->instanceId,
+            'questionIds' => $this->questionIds,
+            'currentIndex' => $this->currentIndex,
+            'score' => $this->score,
+            'xpEarned' => $this->xpEarned,
+            'bonusXp' => $this->bonusXp,
+            'subject_id' => $this->selectedSubjectId,
+            'topic_id' => $this->selectedTopicId,
+            'showResult' => $this->showResult,
+            'selectedOptionId' => $this->selectedOptionId,
+            'isCorrect' => $this->isCorrect,
+            'correctOptionId' => $this->correctOptionId,
+        ], now()->addHours(2));
     }
 
     protected function finishGame()
     {
         $this->isFinished = true;
+        Cache::forget('arena_speedrun_' . auth()->id());
         $user = auth()->user();
 
         // Get subject name for category
@@ -156,7 +242,11 @@ class SpeedRun extends Component
         if ($newLevel > $user->level) {
             $user->level = $newLevel;
             $user->save();
+            $user->notify(new \App\Notifications\LevelUpNotification($newLevel));
         }
+
+        // Check for achievements
+        \App\Services\AchievementService::check($user);
     }
 
     public function render()

@@ -90,6 +90,9 @@
                 </div>
 
                 <div class="flex items-center gap-6">
+                    <!-- Notifications -->
+                    @livewire('student.notification-bell')
+
                     <!-- Theme Toggle -->
                     <button @click="theme = (theme === 'light' ? 'dark' : 'light')" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" title="Toggle Theme">
                         <svg x-show="theme === 'dark'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

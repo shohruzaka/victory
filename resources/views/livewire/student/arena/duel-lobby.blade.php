@@ -28,6 +28,12 @@
                 <button wire:click="findMatch" class="btn btn-primary btn-lg w-full rounded-none border-2 border-cyan-600 dark:border-cyan-400 bg-cyan-600 dark:bg-cyan-400 text-white dark:text-slate-950 hover:bg-transparent hover:text-cyan-600 dark:hover:text-cyan-400 hover:border-cyan-600 dark:hover:border-cyan-400 transition-all font-display uppercase tracking-[0.2em] shadow-md dark:shadow-[0_0_30px_rgba(6,182,212,0.4)]">
                     Initiate_Matchmaking
                 </button>
+
+                <div class="pt-4 border-t border-slate-100 dark:border-white/5">
+                    <a href="{{ route('arena.duel.history') }}" class="text-[10px] font-display uppercase tracking-[0.3em] text-slate-500 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors font-bold">
+                        [ View_Combat_History ]
+                    </a>
+                </div>
             </div>
         @else
             <div class="space-y-12 py-8">

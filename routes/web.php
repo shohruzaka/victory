@@ -15,7 +15,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/arena/speedrun', \App\Livewire\Student\Arena\SpeedRun::class)->name('arena.speedrun');
     Route::get('/arena/survival', \App\Livewire\Student\Arena\Survival::class)->name('arena.survival');
     Route::get('/arena/duel', \App\Livewire\Student\Arena\DuelLobby::class)->name('arena.duel.lobby');
+    Route::get('/arena/duel/history', \App\Livewire\Student\Arena\DuelHistory::class)->name('arena.duel.history');
     Route::get('/arena/duel/{uuid}', \App\Livewire\Student\Arena\DuelGame::class)->name('arena.duel');
+    Route::get('/profile/{id}', \App\Livewire\Student\PublicProfile::class)->name('profile.public');
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
@@ -23,6 +25,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/subjects', \App\Livewire\Admin\Subjects\Index::class)->name('admin.subjects.index');
     Route::get('/admin/students', \App\Livewire\Admin\Users\Index::class)->name('admin.users.index');
     Route::get('/admin/questions', \App\Livewire\Admin\Questions\Index::class)->name('admin.questions.index');
+    Route::get('/admin/questions/statistics', \App\Livewire\Admin\Questions\Statistics::class)->name('admin.questions.statistics');
     Route::get('/admin/questions/create', \App\Livewire\Admin\Questions\Form::class)->name('admin.questions.create');
     Route::get('/admin/questions/import', \App\Livewire\Admin\Questions\Import::class)->name('admin.questions.import');
     Route::get('/admin/questions/{question}/edit', \App\Livewire\Admin\Questions\Form::class)->name('admin.questions.edit');

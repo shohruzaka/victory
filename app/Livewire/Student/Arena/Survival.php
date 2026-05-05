@@ -5,10 +5,14 @@ namespace App\Livewire\Student\Arena;
 use App\Models\GameResult;
 use App\Models\Question;
 use App\Models\Subject;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class Survival extends Component
 {
+    public $instanceId;
+
     public $questionIds = [];
 
     public $currentIndex = 0;
@@ -38,24 +42,66 @@ class Survival extends Component
         $this->selectedSubjectId = request('subject_id');
         $this->selectedTopicId = request('topic_id');
 
-        $query = Question::query();
+        $cacheKey = 'arena_survival_' . auth()->id();
+        $cached = Cache::get($cacheKey);
 
-        if ($this->selectedSubjectId) {
-            $query->whereHas('topic', function ($q) {
-                $q->where('subject_id', $this->selectedSubjectId);
-            });
+        if ($cached && 
+            $cached['subject_id'] == $this->selectedSubjectId && 
+            $cached['topic_id'] == $this->selectedTopicId &&
+            !$cached['isFinished']) {
+            
+            $this->questionIds = $cached['questionIds'];
+            $this->currentIndex = $cached['currentIndex'];
+            $this->score = $cached['score'];
+            $this->xpEarned = $cached['xpEarned'];
+            $this->showResult = $cached['showResult'] ?? false;
+            $this->selectedOptionId = $cached['selectedOptionId'] ?? null;
+            $this->isCorrect = $cached['isCorrect'] ?? null;
+            $this->correctOptionId = $cached['correctOptionId'] ?? null;
+            $this->reasonForFinish = $cached['reasonForFinish'] ?? '';
+            
+            // Xavfsizlik: Eski oynani yaroqsiz qilish uchun yangi ID generatsiya qilamiz
+            $this->instanceId = (string) Str::uuid();
+            $this->saveToCache();
+        } else {
+            $this->instanceId = (string) Str::uuid();
+            $query = Question::query();
+
+            if ($this->selectedSubjectId) {
+                $query->whereHas('topic', function ($q) {
+                    $q->where('subject_id', $this->selectedSubjectId);
+                });
+            }
+
+            if ($this->selectedTopicId) {
+                $query->where('topic_id', $this->selectedTopicId);
+            }
+
+            $this->questionIds = $query->inRandomOrder()->pluck('id')->toArray();
+
+            if (empty($this->questionIds)) {
+                $this->isFinished = true;
+                $this->reasonForFinish = 'no_questions';
+            } else {
+                $this->saveToCache();
+            }
         }
+    }
 
-        if ($this->selectedTopicId) {
-            $query->where('topic_id', $this->selectedTopicId);
+    protected function validateSession()
+    {
+        $cached = Cache::get('arena_survival_' . auth()->id());
+        
+        if ($cached && isset($cached['instanceId']) && $cached['instanceId'] !== $this->instanceId) {
+            $this->dispatch('swal', [
+                'title' => 'Sessiya eskirgan!',
+                'text' => 'Boshqa oynada test faollashgan. Davom etish uchun sahifani yangilang.',
+                'icon' => 'warning'
+            ]);
+            return false;
         }
-
-        $this->questionIds = $query->inRandomOrder()->pluck('id')->toArray();
-
-        if (empty($this->questionIds)) {
-            $this->isFinished = true;
-            $this->reasonForFinish = 'no_questions';
-        }
+        
+        return true;
     }
 
     public function getQuestionProperty()
@@ -69,18 +115,29 @@ class Survival extends Component
 
     public function answer($optionId)
     {
+        if (!$this->validateSession()) {
+            return;
+        }
+
         if ($this->showResult || $this->isFinished) {
             return;
         }
 
         $this->selectedOptionId = $optionId;
         $question = $this->question;
+
+        // Statistika: Umumiy urinishlarni oshiramiz
+        $question->increment('total_attempts');
+
         $correctOption = $question->options->where('is_correct', true)->first();
         $this->correctOptionId = $correctOption ? $correctOption->id : null;
 
         if ($this->correctOptionId == $optionId) {
             $this->isCorrect = true;
             $this->score++;
+
+            // Statistika: To'g'ri javoblar urinishini oshiramiz
+            $question->increment('correct_attempts');
             
             // Progressive XP: Har bir keyingi savol uchun +10 XP bonus
             $bonus = $this->currentIndex * 10;
@@ -94,10 +151,16 @@ class Survival extends Component
             $this->reasonForFinish = 'mistake';
             // We'll show the correct answer first, then end
         }
+
+        $this->saveToCache();
     }
 
     public function proceed()
     {
+        if (!$this->validateSession()) {
+            return;
+        }
+
         if ($this->reasonForFinish === 'mistake') {
             $this->finishGame();
 
@@ -107,16 +170,40 @@ class Survival extends Component
         $this->currentIndex++;
         $this->showResult = false;
         $this->selectedOptionId = null;
+        $this->isCorrect = null;
+        $this->correctOptionId = null;
 
         if ($this->currentIndex >= count($this->questionIds)) {
             $this->reasonForFinish = 'no_questions';
             $this->finishGame();
+        } else {
+            $this->saveToCache();
         }
+    }
+
+    protected function saveToCache()
+    {
+        Cache::put('arena_survival_' . auth()->id(), [
+            'instanceId' => $this->instanceId,
+            'questionIds' => $this->questionIds,
+            'currentIndex' => $this->currentIndex,
+            'score' => $this->score,
+            'xpEarned' => $this->xpEarned,
+            'subject_id' => $this->selectedSubjectId,
+            'topic_id' => $this->selectedTopicId,
+            'showResult' => $this->showResult,
+            'selectedOptionId' => $this->selectedOptionId,
+            'isCorrect' => $this->isCorrect,
+            'correctOptionId' => $this->correctOptionId,
+            'reasonForFinish' => $this->reasonForFinish,
+            'isFinished' => $this->isFinished,
+        ], now()->addHours(2));
     }
 
     protected function finishGame()
     {
         $this->isFinished = true;
+        Cache::forget('arena_survival_' . auth()->id());
         $user = auth()->user();
 
         // Get subject name for category
@@ -143,7 +230,11 @@ class Survival extends Component
         if ($newLevel > $user->level) {
             $user->level = $newLevel;
             $user->save();
+            $user->notify(new \App\Notifications\LevelUpNotification($newLevel));
         }
+
+        // Check for achievements
+        \App\Services\AchievementService::check($user);
     }
 
     public function render()

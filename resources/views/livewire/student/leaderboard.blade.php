@@ -25,7 +25,7 @@
                             </span>
                         </td>
                         <td class="p-6">
-                            <div class="flex items-center gap-4">
+                            <a href="{{ route('profile.public', $user->id) }}" class="flex items-center gap-4 group/item">
                                 <div class="w-10 h-10 rounded-full border {{ $index < 3 ? 'border-cyan-600 dark:border-cyan-500 shadow-sm dark:shadow-[0_0_10px_rgba(6,182,212,0.4)]' : 'border-slate-200 dark:border-white/10' }} overflow-hidden">
                                     @if($user->avatar_url)
                                         <img src="{{ $user->avatar_url }}" class="w-full h-full object-cover">
@@ -36,7 +36,7 @@
                                     @endif
                                 </div>
                                 <div class="flex flex-col">
-                                    <span class="font-bold text-slate-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors uppercase tracking-tight">
+                                    <span class="font-bold text-slate-900 dark:text-white group-hover/item:text-cyan-600 dark:group-hover/item:text-cyan-400 transition-colors uppercase tracking-tight">
                                         {{ $user->name }}
                                         @if(auth()->id() == $user->id)
                                             <span class="text-[9px] text-cyan-600 dark:text-cyan-500 ml-2 font-mono font-bold">(YOU)</span>
@@ -44,7 +44,7 @@
                                     </span>
                                     <span class="text-[10px] text-slate-500 font-display italic uppercase tracking-tighter">{{ $user->rank }}</span>
                                 </div>
-                            </div>
+                            </a>
                         </td>
                         <td class="p-6 text-center">
                             <span class="font-mono text-xs text-slate-600 dark:text-slate-300 font-bold">LVL {{ $user->level }}</span>
