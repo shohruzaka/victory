@@ -3,7 +3,67 @@
         <h2 class="font-display text-4xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">
             Global <span class="text-cyan-600 dark:text-cyan-400">Leaderboard</span>
         </h2>
-        <p class="text-sm text-slate-500 font-mono uppercase tracking-widest font-bold">Top Players in the Neural Grid</p>
+        <p class="text-[10px] font-mono text-slate-500 uppercase tracking-[0.4em] font-bold">Neural grid rankings synchronized</p>
+    </div>
+
+    <!-- Hall of Fame / Records -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Classic Record -->
+        <div class="group relative">
+            <div class="absolute -inset-0.5 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-lg blur opacity-10 group-hover:opacity-30 transition duration-500"></div>
+            <div class="relative cyber-glass p-6 border-l-4 border-cyan-600 text-center space-y-4">
+                <p class="text-[9px] font-mono text-cyan-600 dark:text-cyan-400 uppercase font-black tracking-widest">Classic_Record</p>
+                @if($records['classic'])
+                    <div class="space-y-2">
+                        <div class="w-12 h-12 mx-auto rounded-full border-2 border-cyan-600/30 overflow-hidden shadow-sm">
+                            <img src="{{ $records['classic']->user->avatar_url }}" class="w-full h-full object-cover">
+                        </div>
+                        <a href="{{ route('profile.public', $records['classic']->user_id) }}" class="block text-sm font-bold text-slate-900 dark:text-white uppercase hover:text-cyan-600 transition-colors">{{ $records['classic']->user->name }}</a>
+                        <p class="text-2xl font-display font-black text-cyan-600 dark:text-cyan-400">{{ $records['classic']->score }} <span class="text-[10px] text-slate-500 font-normal">PTS</span></p>
+                    </div>
+                @else
+                    <p class="text-[10px] font-mono text-slate-400 uppercase py-6">No Data_Link</p>
+                @endif
+            </div>
+        </div>
+
+        <!-- Survival Record -->
+        <div class="group relative">
+            <div class="absolute -inset-0.5 bg-gradient-to-r from-red-600 to-orange-600 rounded-lg blur opacity-10 group-hover:opacity-30 transition duration-500"></div>
+            <div class="relative cyber-glass p-6 border-l-4 border-red-600 text-center space-y-4">
+                <p class="text-[9px] font-mono text-red-600 dark:text-red-400 uppercase font-black tracking-widest">Survival_God</p>
+                @if($records['survival'])
+                    <div class="space-y-2">
+                        <div class="w-12 h-12 mx-auto rounded-full border-2 border-red-600/30 overflow-hidden shadow-sm">
+                            <img src="{{ $records['survival']->user->avatar_url }}" class="w-full h-full object-cover">
+                        </div>
+                        <a href="{{ route('profile.public', $records['survival']->user_id) }}" class="block text-sm font-bold text-slate-900 dark:text-white uppercase hover:text-red-600 transition-colors">{{ $records['survival']->user->name }}</a>
+                        <p class="text-2xl font-display font-black text-red-600 dark:text-red-400">{{ $records['survival']->score }} <span class="text-[10px] text-slate-500 font-normal">NODES</span></p>
+                    </div>
+                @else
+                    <p class="text-[10px] font-mono text-slate-400 uppercase py-6">No Data_Link</p>
+                @endif
+            </div>
+        </div>
+
+        <!-- SpeedRun Record -->
+        <div class="group relative">
+            <div class="absolute -inset-0.5 bg-gradient-to-r from-fuchsia-600 to-purple-600 rounded-lg blur opacity-10 group-hover:opacity-30 transition duration-500"></div>
+            <div class="relative cyber-glass p-6 border-l-4 border-fuchsia-600 text-center space-y-4">
+                <p class="text-[9px] font-mono text-fuchsia-600 dark:text-fuchsia-400 uppercase font-black tracking-widest">Speed_Demon</p>
+                @if($records['speedrun'])
+                    <div class="space-y-2">
+                        <div class="w-12 h-12 mx-auto rounded-full border-2 border-fuchsia-600/30 overflow-hidden shadow-sm">
+                            <img src="{{ $records['speedrun']->user->avatar_url }}" class="w-full h-full object-cover">
+                        </div>
+                        <a href="{{ route('profile.public', $records['speedrun']->user_id) }}" class="block text-sm font-bold text-slate-900 dark:text-white uppercase hover:text-fuchsia-600 transition-colors">{{ $records['speedrun']->user->name }}</a>
+                        <p class="text-2xl font-display font-black text-fuchsia-600 dark:text-fuchsia-400">+{{ $records['speedrun']->xp_earned }} <span class="text-[10px] text-slate-500 font-normal">BONUS</span></p>
+                    </div>
+                @else
+                    <p class="text-[10px] font-mono text-slate-400 uppercase py-6">No Data_Link</p>
+                @endif
+            </div>
+        </div>
     </div>
 
     <div class="cyber-glass-light overflow-hidden transition-all duration-300">
