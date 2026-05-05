@@ -30,15 +30,20 @@ class Index extends Component
 
     public function render()
     {
-        $questions = Question::withCount('options')
+        $questions = Question::with(['topic.subject', 'options'])
+            ->withCount('options')
             ->when($this->search, function($query) {
                 $query->where('text', 'like', '%' . $this->search . '%');
             })
             ->when($this->subject, function($query) {
-                $query->where('subject', 'like', '%' . $this->subject . '%');
+                $query->whereHas('topic.subject', function($q) {
+                    $q->where('name', 'like', '%' . $this->subject . '%');
+                });
             })
             ->when($this->topic, function($query) {
-                $query->where('topic', 'like', '%' . $this->topic . '%');
+                $query->whereHas('topic', function($q) {
+                    $q->where('name', 'like', '%' . $this->topic . '%');
+                });
             })
             ->when($this->difficulty, function($query) {
                 $query->where('difficulty', $this->difficulty);

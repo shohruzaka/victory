@@ -51,7 +51,7 @@
                                         {{ $question->text }}
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <span class="text-[9px] font-mono text-cyan-600 dark:text-cyan-400 uppercase font-bold">{{ $question->topic->name ?? 'Noma'lum Mavzu' }}</span>
+                                        <span class="text-[9px] font-mono text-cyan-600 dark:text-cyan-400 uppercase font-bold">{{ $question->topic->name ?? "Noma'lum Mavzu" }}</span>
                                         <span class="text-[9px] font-mono text-slate-400 uppercase">/</span>
                                         <span class="text-[9px] font-mono text-slate-400 uppercase">{{ $question->difficulty }}</span>
                                     </div>

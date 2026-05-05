@@ -44,9 +44,16 @@
                 </div>
 
                 <div class="w-full pt-4 border-t border-slate-100 dark:border-white/5">
-                    <p class="text-[9px] font-mono text-slate-400 dark:text-slate-600 leading-relaxed uppercase">
-                        Recommended: Square image, max 2MB. Valid formats: JPG, PNG, WEBP.
+                    <p class="text-[9px] font-mono text-slate-500 dark:text-slate-400 leading-relaxed uppercase">
+                        <span class="text-cyan-600 dark:text-cyan-400 font-bold">Limit:</span> Max 2MB (Square recommended)
                     </p>
+                    <p class="text-[8px] font-mono text-slate-400 dark:text-slate-600 mt-1 uppercase">JPG, PNG, WEBP_FORMATS_ONLY</p>
+                    
+                    @error('avatar') 
+                        <div class="mt-2 p-2 bg-red-500/10 border border-red-500/30 rounded">
+                            <span class="text-red-500 text-[9px] font-mono uppercase tracking-tighter">{{ $message }}</span>
+                        </div>
+                    @enderror
                 </div>
             </div>
         </div>

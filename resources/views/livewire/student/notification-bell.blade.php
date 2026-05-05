@@ -41,9 +41,17 @@
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
                             @endif
                         </div>
-                        <div class="min-w-0">
+                        <div class="min-w-0 flex-grow">
                             <p class="text-[10px] font-bold text-slate-900 dark:text-white uppercase truncate">{{ $notification->data['title'] }}</p>
                             <p class="text-[9px] text-slate-500 dark:text-slate-400 leading-tight mt-1">{{ $notification->data['message'] }}</p>
+                            
+                            @if(($notification->data['type'] ?? '') === 'duel_challenge')
+                                <div class="mt-3 flex gap-2">
+                                    <button wire:click="$dispatchTo('student.challenge-action', 'accept', { duelUuid: '{{ $notification->data['duel_uuid'] }}' })" class="px-3 py-1 bg-emerald-600/10 border border-emerald-600/30 text-emerald-600 text-[8px] font-mono font-bold uppercase hover:bg-emerald-600 hover:text-white transition-all">Accept_Duel</button>
+                                    <button wire:click="$dispatchTo('student.challenge-action', 'decline', { duelUuid: '{{ $notification->data['duel_uuid'] }}' })" class="px-3 py-1 bg-red-600/10 border border-red-600/30 text-red-600 text-[8px] font-mono font-bold uppercase hover:bg-red-600 hover:text-white transition-all">Decline</button>
+                                </div>
+                            @endif
+
                             <p class="text-[8px] font-mono text-slate-400 mt-2 uppercase">{{ $notification->created_at->diffForHumans() }}</p>
                         </div>
                     </div>
