@@ -25,14 +25,14 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'name' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
             'role' => \App\Enums\UserRole::STUDENT,
-            'group_name' => fake()->bothify('###-##'),
-            'xp' => fake()->numberBetween(0, 5000),
+            'group_name' => $this->faker->bothify('###-##'),
+            'xp' => $this->faker->numberBetween(0, 5000),
             'level' => 1,
         ];
     }
