@@ -163,8 +163,8 @@
             <a href="{{ route('arena.duel.history') }}" class="text-[10px] font-mono text-cyan-700 dark:text-cyan-400 hover:underline uppercase font-bold">View All History</a>
         </div>
         
-        <div class="cyber-glass-light overflow-hidden transition-all duration-300">
-            <table class="w-full text-left">
+        <div class="cyber-glass-light overflow-x-auto transition-all duration-300">
+            <table class="w-full text-left min-w-[600px] sm:min-w-0">
                 <thead class="bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-white/10 font-display uppercase text-[9px] tracking-[0.2em] text-slate-500 dark:text-slate-400">
                     <tr>
                         <th class="p-4">Arena_Mode</th>

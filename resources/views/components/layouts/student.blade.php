@@ -124,9 +124,9 @@
         </main>
 
         <!-- Footer -->
-        <footer class="mt-auto py-12 border-t border-slate-200 dark:border-white/5 transition-colors duration-300">
+        <footer class="mt-auto py-8 sm:py-12 border-t border-slate-200 dark:border-white/5 transition-colors duration-300">
             <div class="container mx-auto px-4">
-                <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+                <div class="flex flex-col items-center gap-8 md:flex-row md:justify-between">
                     <div class="flex flex-col items-center md:items-start gap-2">
                         <div class="flex items-center gap-2 opacity-80">
                             <div class="w-6 h-6 bg-slate-900 dark:bg-cyan-500 rounded flex items-center justify-center">
@@ -134,19 +134,19 @@
                             </div>
                             <span class="font-display font-bold text-lg tracking-tighter text-slate-900 dark:text-white uppercase tracking-tight">Terminal_Link</span>
                         </div>
-                        <p class="text-[10px] font-mono text-slate-400 dark:text-slate-600 uppercase tracking-widest">Neural_Learning_Grid // v1.0.0</p>
+                        <p class="text-[10px] font-mono text-slate-400 dark:text-slate-600 uppercase tracking-widest text-center md:text-left">Neural_Learning_Grid // v1.0.0</p>
                     </div>
 
-                    <div class="flex items-center gap-8 text-[10px] font-display uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
+                    <div class="flex flex-wrap justify-center items-center gap-4 sm:gap-8 text-[10px] font-display uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
                         <a href="#" class="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">Neural_Docs</a>
                         <a href="#" class="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">Privacy_Shield</a>
                         <a href="#" class="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">Grid_Status</a>
                     </div>
 
                     <div class="flex items-center gap-4">
-                        <div class="h-1 w-12 bg-slate-200 dark:bg-slate-800"></div>
+                        <div class="hidden sm:block h-1 w-12 bg-slate-200 dark:bg-slate-800"></div>
                         <p class="text-[10px] font-mono text-slate-400 dark:text-slate-600 uppercase">
-                            &copy; {{ date('Y') }} QuizArena_Systems
+                            &copy; {{ date('Y') }} s404ruz
                         </p>
                     </div>
                 </div>
