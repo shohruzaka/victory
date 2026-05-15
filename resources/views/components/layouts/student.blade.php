@@ -89,7 +89,7 @@
                     <a href="{{ route('settings') }}" class="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors {{ request()->routeIs('settings') ? 'text-cyan-600 dark:text-cyan-400' : '' }}">Settings</a>
                 </div>
 
-                <div class="flex items-center gap-6">
+                <div class="flex items-center gap-2 sm:gap-4 md:gap-6">
                     <!-- Notifications -->
                     @livewire('student.notification-bell')
 
@@ -103,14 +103,14 @@
                         </svg>
                     </button>
 
-                    <div class="flex flex-col items-end">
-                        <span class="text-[10px] font-mono text-slate-400 dark:text-slate-500 uppercase tracking-tighter">Identity_Confirmed</span>
-                        <span class="text-xs font-display font-bold text-slate-900 dark:text-white uppercase">{{ auth()->user()->name }}</span>
+                    <div class="hidden sm:flex flex-col items-end">
+                        <span class="text-[10px] font-mono text-slate-400 dark:text-slate-500 uppercase tracking-tighter leading-none mb-1">Identity_Confirmed</span>
+                        <span class="text-xs font-display font-bold text-slate-900 dark:text-white uppercase leading-none">{{ auth()->user()->name }}</span>
                     </div>
                     
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="p-2 rounded border border-white/5 hover:border-red-500/50 hover:text-red-500 transition-all">
+                        <button type="submit" class="p-2 rounded border border-slate-200 dark:border-white/5 hover:border-red-500/50 hover:text-red-500 transition-all">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
                         </button>
                     </form>
