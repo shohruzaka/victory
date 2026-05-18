@@ -7,7 +7,7 @@
                     System Online // Version 1.0.0
                 </div>
                 
-                <h1 class="font-display font-black text-6xl md:text-8xl tracking-tighter leading-none">
+                <h1 class="font-display font-black text-4xl sm:text-6xl md:text-8xl tracking-tighter leading-none">
                     <span class="block text-slate-900 dark:text-white">LEVEL UP YOUR</span>
                     <span class="block text-cyan-600 dark:neon-text-cyan dark:text-cyan-400 italic">KNOWLEDGE</span>
                 </h1>

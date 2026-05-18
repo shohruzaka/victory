@@ -34,7 +34,7 @@
                     <div class="w-10 h-10 bg-cyan-600 dark:bg-cyan-500 rounded-lg flex items-center justify-center shadow-sm dark:shadow-[0_0_15px_rgba(6,182,212,0.5)] group-hover:shadow-md dark:group-hover:shadow-[0_0_25px_rgba(6,182,212,0.8)] transition-all duration-300">
                         <span class="font-display font-black text-xl text-white dark:text-slate-950">Q</span>
                     </div>
-                    <span class="font-display font-bold text-2xl tracking-tighter text-slate-900 dark:neon-text-cyan dark:text-white">QUIZ<span class="text-fuchsia-600 dark:text-fuchsia-500 dark:neon-text-fuchsia">ARENA</span></span>
+                    <span class="hidden sm:block font-display font-bold text-2xl tracking-tighter text-slate-900 dark:neon-text-cyan dark:text-white">QUIZ<span class="text-fuchsia-600 dark:text-fuchsia-500 dark:neon-text-fuchsia">ARENA</span></span>
                 </a>
 
                 <div class="hidden md:flex items-center gap-8 font-display font-medium uppercase tracking-widest text-sm text-slate-600 dark:text-slate-200">
@@ -43,7 +43,7 @@
                     <a href="{{ route('dashboard') }}" class="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors {{ request()->routeIs('dashboard') ? 'text-cyan-600 dark:text-cyan-400' : '' }}">Arena</a>
                 </div>
 
-                <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2 sm:gap-4">
                     <!-- Theme Toggle -->
                     <button @click="theme = (theme === 'light' ? 'dark' : 'light')" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" title="Toggle Theme">
                         <svg x-show="theme === 'dark'" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -56,13 +56,16 @@
 
                     @auth
                         @if(auth()->user()->isAdmin())
-                            <a href="{{ route('admin.dashboard') }}" class="btn btn-ghost btn-sm font-display text-cyan-600 dark:text-cyan-400">Admin_Panel</a>
+                            <a href="{{ route('admin.dashboard') }}" class="btn btn-ghost btn-sm font-display text-cyan-600 dark:text-cyan-400 px-2 sm:px-4">Admin</a>
                         @else
-                            <a href="{{ route('dashboard') }}" class="btn btn-ghost btn-sm font-display text-cyan-600 dark:text-cyan-400">Terminal</a>
+                            <a href="{{ route('dashboard') }}" class="btn btn-ghost btn-sm font-display text-cyan-600 dark:text-cyan-400 px-2 sm:px-4">Terminal</a>
                         @endif
                     @else
-                        <a href="{{ route('login') }}" class="btn btn-ghost btn-sm font-display text-slate-600 dark:text-slate-200">Login</a>
-                        <a href="{{ route('register') }}" class="btn btn-primary btn-sm font-display shadow-sm dark:shadow-[0_0_15px_rgba(6,182,212,0.5)] border-none bg-cyan-600 dark:bg-cyan-500 text-white dark:text-slate-950 hover:bg-cyan-500 dark:hover:bg-cyan-400">Join Arena</a>
+                        <a href="{{ route('login') }}" class="btn btn-ghost btn-sm font-display text-slate-600 dark:text-slate-200 px-2 sm:px-4">Login</a>
+                        <a href="{{ route('register') }}" class="btn btn-primary btn-sm font-display shadow-sm dark:shadow-[0_0_15px_rgba(6,182,212,0.5)] border-none bg-cyan-600 dark:bg-cyan-500 text-white dark:text-slate-950 hover:bg-cyan-500 dark:hover:bg-cyan-400 px-3 sm:px-4">
+                            <span class="hidden sm:inline">Join Arena</span>
+                            <span class="sm:hidden">Join</span>
+                        </a>
                     @endauth
                 </div>
             </div>
@@ -87,7 +90,7 @@
                         <p class="text-[10px] font-mono text-slate-400 dark:text-slate-600 uppercase tracking-widest">Neural_Learning_Grid // v1.0.0</p>
                     </div>
 
-                    <div class="flex items-center gap-8 text-[10px] font-display uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
+                    <div class="flex flex-wrap justify-center items-center gap-4 sm:gap-8 text-[10px] font-display uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
                         <a href="#" class="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">Documentation</a>
                         <a href="#" class="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">Privacy_Protocol</a>
                         <a href="#" class="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">System_Status</a>
