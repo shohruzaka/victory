@@ -18,14 +18,14 @@ class StudentSeeder extends Seeder
             ['email' => 'student@cyberarena.test'],
             [
                 'name' => 'Test Talaba',
-                'password' => Hash::make('password'),
-                'group_name' => '211-21',
+                'password' => Hash::make('student'),
+                'group_name' => '25-210',
                 'xp' => 1500,
                 'level' => 2,
             ]
         );
 
         // 20 ta tasodifiy talaba
-        User::factory(20)->create();
+        //User::factory(5)->create();
     }
 }

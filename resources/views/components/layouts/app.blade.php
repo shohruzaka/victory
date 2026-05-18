@@ -6,7 +6,26 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'CyberArena') }} - Gamified Learning</title>
+    
+    <!-- SEO Meta Tags -->
+    <title>{{ $title ?? 'CyberArena | Level Up Your Programming Skills' }}</title>
+    <meta name="description" content="CyberArena - Gamified learning platform for programming. Master C++, OOP, and Algorithms through high-stakes duels and survival challenges.">
+    <meta name="keywords" content="CyberArena, megabit, programming competition, C++, OOP, algorithms, coding duel, gamified learning, student arena">
+    <meta name="author" content="CyberArena Systems">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://megabit.uz/">
+    <meta property="og:title" content="CyberArena | Gamified Learning Platform">
+    <meta property="og:description" content="Master programming through competitive gaming. Join the arena now.">
+    <meta property="og:image" content="{{ asset('screenshot/victory.test_(iPhone 14 Pro Max) (1).png') }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://megabit.uz/">
+    <meta property="twitter:title" content="CyberArena | Level Up Your Programming Skills">
+    <meta property="twitter:description" content="Master programming through competitive gaming. Join the arena now.">
+    <meta property="twitter:image" content="{{ asset('screenshot/victory.test_(iPhone 14 Pro Max) (1).png') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -99,7 +118,7 @@
                     <div class="flex items-center gap-4">
                         <div class="h-1 w-12 bg-slate-200 dark:bg-slate-800"></div>
                         <p class="text-[10px] font-mono text-slate-400 dark:text-slate-600 uppercase">
-                            &copy; {{ date('Y') }} CyberArena_Systems
+                            &copy; {{ date('Y') }} shohruzaka
                         </p>
                     </div>
                 </div>

@@ -6,7 +6,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'CyberArena') }} - Student Terminal</title>
+    <title>{{ $title ?? 'Terminal // CyberArena' }}</title>
+    <meta name="description" content="CyberArena Student Terminal - Access game modes, track progress, and climb the leaderboard.">
+    <meta name="robots" content="noindex, nofollow">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -146,7 +148,7 @@
                     <div class="flex items-center gap-4">
                         <div class="hidden sm:block h-1 w-12 bg-slate-200 dark:bg-slate-800"></div>
                         <p class="text-[10px] font-mono text-slate-400 dark:text-slate-600 uppercase">
-                            &copy; {{ date('Y') }} s404ruz
+                            &copy; {{ date('Y') }} shohruzaka
                         </p>
                     </div>
                 </div>

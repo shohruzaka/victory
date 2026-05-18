@@ -15,10 +15,10 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         User::updateOrCreate(
-            ['email' => 'admin@cyberarena.test'],
+            ['email' => 'tshohruz@gmail.com'],
             [
-                'name' => 'System Admin',
-                'password' => Hash::make('password'),
+                'name' => 'Shohruz Admin',
+                'password' => Hash::make('dotcent.2233'),
                 'role' => UserRole::ADMIN,
             ]
         );
