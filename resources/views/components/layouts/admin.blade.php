@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin - {{ config('app.name', 'QuizArena') }}</title>
+    <title>Admin - {{ config('app.name', 'CyberArena') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,7 +24,7 @@
             <div class="p-6">
                 <a href="/" class="flex items-center gap-2 group">
                     <div class="w-8 h-8 bg-cyan-600 dark:bg-cyan-500 rounded flex items-center justify-center shadow-sm dark:shadow-[0_0_15px_rgba(6,182,212,0.5)]">
-                        <span class="font-display font-black text-lg text-white dark:text-slate-950">Q</span>
+                        <span class="font-display font-black text-lg text-white dark:text-slate-950">C</span>
                     </div>
                     <span class="font-display font-bold text-xl tracking-tighter text-slate-900 dark:neon-text-cyan dark:text-white">ADMIN<span class="text-fuchsia-600 dark:text-fuchsia-500 dark:neon-text-fuchsia">CORE</span></span>
                 </a>

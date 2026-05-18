@@ -15,7 +15,7 @@ class StudentSeeder extends Seeder
     {
         // Bitta aniq test talabasi (login qilish uchun qulay)
         User::updateOrCreate(
-            ['email' => 'student@quizarena.test'],
+            ['email' => 'student@cyberarena.test'],
             [
                 'name' => 'Test Talaba',
                 'password' => Hash::make('password'),

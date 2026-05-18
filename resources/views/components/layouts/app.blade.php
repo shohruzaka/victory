@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'QuizArena') }} - Gamified Learning</title>
+    <title>{{ config('app.name', 'CyberArena') }} - Gamified Learning</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,9 +32,9 @@
             <div class="container mx-auto flex items-center justify-between">
                 <a href="/" class="flex items-center gap-2 group">
                     <div class="w-10 h-10 bg-cyan-600 dark:bg-cyan-500 rounded-lg flex items-center justify-center shadow-sm dark:shadow-[0_0_15px_rgba(6,182,212,0.5)] group-hover:shadow-md dark:group-hover:shadow-[0_0_25px_rgba(6,182,212,0.8)] transition-all duration-300">
-                        <span class="font-display font-black text-xl text-white dark:text-slate-950">Q</span>
+                        <span class="font-display font-black text-xl text-white dark:text-slate-950">C</span>
                     </div>
-                    <span class="hidden sm:block font-display font-bold text-2xl tracking-tighter text-slate-900 dark:neon-text-cyan dark:text-white">QUIZ<span class="text-fuchsia-600 dark:text-fuchsia-500 dark:neon-text-fuchsia">ARENA</span></span>
+                    <span class="hidden sm:block font-display font-bold text-2xl tracking-tighter text-slate-900 dark:neon-text-cyan dark:text-white">CYBER<span class="text-fuchsia-600 dark:text-fuchsia-500 dark:neon-text-fuchsia">ARENA</span></span>
                 </a>
 
                 <div class="hidden md:flex items-center gap-8 font-display font-medium uppercase tracking-widest text-sm text-slate-600 dark:text-slate-200">
@@ -83,9 +83,9 @@
                     <div class="flex flex-col items-center md:items-start gap-2">
                         <div class="flex items-center gap-2 opacity-80">
                             <div class="w-6 h-6 bg-slate-900 dark:bg-cyan-500 rounded flex items-center justify-center">
-                                <span class="font-display font-black text-xs text-white dark:text-slate-950">Q</span>
+                                <span class="font-display font-black text-xs text-white dark:text-slate-950">C</span>
                             </div>
-                            <span class="font-display font-bold text-lg tracking-tighter text-slate-900 dark:text-white uppercase">QuizArena</span>
+                            <span class="font-display font-bold text-lg tracking-tighter text-slate-900 dark:text-white uppercase">CyberArena</span>
                         </div>
                         <p class="text-[10px] font-mono text-slate-400 dark:text-slate-600 uppercase tracking-widest">Neural_Learning_Grid // v1.0.0</p>
                     </div>
@@ -99,7 +99,7 @@
                     <div class="flex items-center gap-4">
                         <div class="h-1 w-12 bg-slate-200 dark:bg-slate-800"></div>
                         <p class="text-[10px] font-mono text-slate-400 dark:text-slate-600 uppercase">
-                            &copy; {{ date('Y') }} QuizArena_Systems
+                            &copy; {{ date('Y') }} CyberArena_Systems
                         </p>
                     </div>
                 </div>

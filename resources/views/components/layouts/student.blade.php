@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'QuizArena') }} - Student Terminal</title>
+    <title>{{ config('app.name', 'CyberArena') }} - Student Terminal</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -78,9 +78,9 @@
             <div class="container mx-auto flex items-center justify-between">
                 <a href="/" class="flex items-center gap-2 group">
                     <div class="w-8 h-8 bg-cyan-600 dark:bg-cyan-500 rounded flex items-center justify-center shadow-sm dark:shadow-[0_0_15px_rgba(6,182,212,0.5)]">
-                        <span class="font-display font-black text-lg text-white dark:text-slate-950">Q</span>
+                        <span class="font-display font-black text-lg text-white dark:text-slate-950">C</span>
                     </div>
-                    <span class="font-display font-bold text-xl tracking-tighter text-slate-900 dark:neon-text-cyan dark:text-white uppercase">Terminal</span>
+                    <span class="font-display font-bold text-xl tracking-tighter text-slate-900 dark:neon-text-cyan dark:text-white uppercase">CyberArena</span>
                 </a>
 
                 <div class="hidden md:flex items-center gap-8 font-display font-medium uppercase tracking-widest text-[10px] text-slate-600 dark:text-slate-200">
@@ -130,9 +130,9 @@
                     <div class="flex flex-col items-center md:items-start gap-2">
                         <div class="flex items-center gap-2 opacity-80">
                             <div class="w-6 h-6 bg-slate-900 dark:bg-cyan-500 rounded flex items-center justify-center">
-                                <span class="font-display font-black text-xs text-white dark:text-slate-950">Q</span>
+                                <span class="font-display font-black text-xs text-white dark:text-slate-950">C</span>
                             </div>
-                            <span class="font-display font-bold text-lg tracking-tighter text-slate-900 dark:text-white uppercase tracking-tight">Terminal_Link</span>
+                            <span class="font-display font-bold text-lg tracking-tighter text-slate-900 dark:text-white uppercase tracking-tight">CyberArena</span>
                         </div>
                         <p class="text-[10px] font-mono text-slate-400 dark:text-slate-600 uppercase tracking-widest text-center md:text-left">Neural_Learning_Grid // v1.0.0</p>
                     </div>

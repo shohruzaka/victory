@@ -1,6 +1,6 @@
-# 🎮 QuizArena - Gamifikatsiyalashgan Ta'lim Platformasi
+# 🎮 CyberArena - Gamifikatsiyalashgan Ta'lim Platformasi
 
-QuizArena — bu universitet talabalari o'rtasida o'quv jarayonini (xususan C++ va boshqa dasturlash fanlari bo'yicha) qiziqarli musobaqaga aylantirish uchun mo'ljallangan interaktiv test platformasi. Loyihaning asosiy maqsadi talabalarni zerikarli testlardan qutqarib, bilimni mustahkamlashni qiziqarli o'yin (gamification) orqali amalga oshirishdir.
+CyberArena — bu universitet talabalari o'rtasida o'quv jarayonini (xususan C++ va boshqa dasturlash fanlari bo'yicha) qiziqarli musobaqaga aylantirish uchun mo'ljallangan interaktiv test platformasi. Loyihaning asosiy maqsadi talabalarni zerikarli testlardan qutqarib, bilimni mustahkamlashni qiziqarli o'yin (gamification) orqali amalga oshirishdir.
 
 ## 🛠 Texnologik Stek (TALL Stack + MySQL)
 
