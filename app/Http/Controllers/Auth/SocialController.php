@@ -18,12 +18,17 @@ class SocialController extends Controller
     {
         $socialUser = Socialite::driver($provider)->user();
         $idField = $provider.'_id';
+        $email = $socialUser->getEmail();
+
+        if (! $email && $provider === 'github') {
+            $email = $socialUser->id.'+'.$socialUser->getNickname().'@users.noreply.github.com';
+        }
 
         $user = User::updateOrCreate([
             $idField => $socialUser->id,
         ], [
             'name' => $socialUser->getName() ?? $socialUser->getNickname(),
-            'email' => $socialUser->getEmail(),
+            'email' => $email,
             'github_token' => $provider === 'github' ? $socialUser->token : null,
             'github_refresh_token' => $provider === 'github' ? $socialUser->refreshToken : null,
         ]);
