@@ -33,9 +33,13 @@ class Index extends Component
 
     public function deleteUser(User $user)
     {
+        if (auth()->id() !== 1) {
+            session()->flash('error', 'Sizda foydalanuvchilarni o\'chirish huquqi (Super Admin ruxsati) yo\'q.');
+            return;
+        }
+
         if ($user->id === auth()->id()) {
             session()->flash('error', 'O\'zingizni o\'chira olmaysiz.');
-
             return;
         }
 
