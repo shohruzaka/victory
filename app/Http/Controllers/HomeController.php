@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\GameResult;
 use App\Models\Duel;
+use App\Models\GameResult;
+use App\Models\Subject;
+use App\Models\User;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -18,31 +19,36 @@ class HomeController extends Controller
             ->get();
 
         // Get recent activities
-        $gameResults = GameResult::with('user')->latest()->limit(3)->get()->map(function($res) {
+        $gameResults = GameResult::with('user')->latest()->limit(3)->get()->map(function ($res) {
             return (object) [
                 'user_name' => $res->user->name,
                 'message' => "completed a {$res->mode} session",
                 'time' => $res->created_at,
-                'color' => 'bg-cyan-600'
+                'color' => 'bg-cyan-600',
             ];
         });
 
-        $duels = Duel::where('status', 'finished')->with(['player1', 'player2'])->latest()->limit(3)->get()->map(function($duel) {
+        $duels = Duel::where('status', 'finished')->with(['player1', 'player2'])->latest()->limit(3)->get()->map(function ($duel) {
             $p1 = $duel->player1->name ?? 'User';
             $p2 = $duel->player2->name ?? 'User';
+
             return (object) [
                 'user_name' => $p1,
                 'message' => "won a Duel against {$p2}",
                 'time' => $duel->updated_at,
-                'color' => 'bg-fuchsia-600'
+                'color' => 'bg-fuchsia-600',
             ];
         });
 
         $activities = collect($gameResults)->merge($duels)->sortByDesc('time')->take(3);
 
+        // Get subjects for the theory showcase
+        $subjects = Subject::withCount(['topics', 'articles'])->latest()->limit(4)->get();
+
         return view('welcome', [
             'topUsers' => $topUsers,
-            'activities' => $activities
+            'activities' => $activities,
+            'subjects' => $subjects,
         ]);
     }
 }

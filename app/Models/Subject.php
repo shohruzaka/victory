@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
+use Database\Factories\SubjectFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Str;
 
 class Subject extends Model
 {
-    /** @use HasFactory<\Database\Factories\SubjectFactory> */
+    /** @use HasFactory<SubjectFactory> */
     use HasFactory;
 
     protected $fillable = ['name', 'slug'];
@@ -18,7 +20,7 @@ class Subject extends Model
     {
         parent::boot();
         static::creating(function ($subject) {
-            if (!$subject->slug) {
+            if (! $subject->slug) {
                 $subject->slug = Str::slug($subject->name);
             }
         });
@@ -27,5 +29,10 @@ class Subject extends Model
     public function topics(): HasMany
     {
         return $this->hasMany(Topic::class);
+    }
+
+    public function articles(): HasManyThrough
+    {
+        return $this->hasManyThrough(Article::class, Topic::class);
     }
 }
