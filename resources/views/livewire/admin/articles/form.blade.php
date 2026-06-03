@@ -11,24 +11,22 @@
     <div class="cyber-glass-light p-6 md:p-8 relative overflow-hidden transition-all duration-300">
         <form wire:submit="save" class="space-y-6 relative z-10">
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Sarlavha -->
-                <div class="form-control w-full space-y-2">
-                    <label class="label p-0">
-                        <span class="label-text font-display uppercase tracking-widest text-[10px] text-slate-500 dark:text-slate-400 font-bold">Maqola sarlavhasi <span class="text-red-500">*</span></span>
-                    </label>
-                    <input wire:model.live.debounce.300ms="title" type="text" placeholder="Maqola sarlavhasini kiriting..." class="input input-bordered w-full bg-white dark:bg-slate-900/50 border-slate-200 dark:border-white/10 text-slate-900 dark:text-white focus:border-cyan-600 dark:focus:border-cyan-500 @error('title') border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 @enderror" />
-                    @error('title') <span class="text-red-500 text-[10px] font-mono uppercase">{{ $message }}</span> @enderror
-                </div>
+            <!-- Sarlavha -->
+            <div class="form-control w-full space-y-2">
+                <label class="label p-0">
+                    <span class="label-text font-display uppercase tracking-widest text-[10px] text-slate-500 dark:text-slate-400 font-bold">Maqola sarlavhasi <span class="text-red-500">*</span></span>
+                </label>
+                <input wire:model.live.debounce.300ms="title" type="text" placeholder="Maqola sarlavhasini kiriting..." class="input input-bordered w-full bg-white dark:bg-slate-900/50 border-slate-200 dark:border-white/10 text-slate-900 dark:text-white focus:border-cyan-600 dark:focus:border-cyan-500 @error('title') border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 @enderror" />
+                @error('title') <span class="text-red-500 text-[10px] font-mono uppercase">{{ $message }}</span> @enderror
+            </div>
 
-                <!-- Slug -->
-                <div class="form-control w-full space-y-2">
-                    <label class="label p-0">
-                        <span class="label-text font-display uppercase tracking-widest text-[10px] text-slate-500 dark:text-slate-400 font-bold">URL qismi (Slug) <span class="text-red-500">*</span></span>
-                    </label>
-                    <input wire:model="slug" type="text" placeholder="maqola-sarlavhasi" class="input input-bordered w-full bg-slate-50 dark:bg-slate-900/30 border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 font-mono text-sm focus:border-cyan-600 dark:focus:border-cyan-500 @error('slug') border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 @enderror" />
-                    @error('slug') <span class="text-red-500 text-[10px] font-mono uppercase">{{ $message }}</span> @enderror
-                </div>
+            <!-- Slug -->
+            <div class="form-control w-full space-y-2">
+                <label class="label p-0">
+                    <span class="label-text font-display uppercase tracking-widest text-[10px] text-slate-500 dark:text-slate-400 font-bold">URL qismi (Slug) <span class="text-red-500">*</span></span>
+                </label>
+                <input wire:model="slug" type="text" placeholder="maqola-sarlavhasi" class="input input-bordered w-full bg-slate-50 dark:bg-slate-900/30 border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 font-mono text-sm focus:border-cyan-600 dark:focus:border-cyan-500 @error('slug') border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 @enderror" />
+                @error('slug') <span class="text-red-500 text-[10px] font-mono uppercase">{{ $message }}</span> @enderror
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
