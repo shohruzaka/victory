@@ -59,22 +59,72 @@
             </div>
 
             <!-- Matn -->
-            <div class="form-control w-full space-y-2">
+            <div class="form-control w-full space-y-2" wire:ignore>
                 <label class="label p-0">
-                    <span class="label-text font-display uppercase tracking-widest text-[10px] text-slate-500 dark:text-slate-400 font-bold">Maqola matni (Markdown qo'llab-quvvatlanadi) <span class="text-red-500">*</span></span>
+                    <span class="label-text font-display uppercase tracking-widest text-[10px] text-slate-500 dark:text-slate-400 font-bold">Maqola matni <span class="text-red-500">*</span></span>
                 </label>
-                <textarea wire:model="content" rows="10" placeholder="Maqola matnini bu yerga yozing..." class="textarea textarea-bordered w-full bg-white dark:bg-slate-900/50 border-slate-200 dark:border-white/10 text-slate-900 dark:text-white focus:border-cyan-600 dark:focus:border-cyan-500 text-base leading-relaxed @error('content') border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 @enderror"></textarea>
+                <textarea id="article-content" rows="15" placeholder="Maqola matnini bu yerga yozing..." class="textarea textarea-bordered w-full bg-white dark:bg-slate-900/50 border-slate-200 dark:border-white/10 text-slate-900 dark:text-white focus:border-cyan-600 dark:focus:border-cyan-500 text-base leading-relaxed @error('content') border-red-500 dark:border-red-500 focus:border-red-500 dark:focus:border-red-500 @enderror">{{ $content }}</textarea>
                 @error('content') <span class="text-red-500 text-[10px] font-mono uppercase">{{ $message }}</span> @enderror
             </div>
 
-            <div class="pt-6 border-t border-slate-200 dark:border-white/10 flex justify-end gap-3">
+            <div class="pt-8 border-t border-slate-200 dark:border-white/10 flex justify-end gap-3">
                 <a href="{{ route('admin.articles.index') }}" class="btn btn-outline rounded-none border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white font-display uppercase tracking-widest text-xs transition-all">
                     Bekor qilish
                 </a>
-                <button type="submit" class="btn btn-primary rounded-none border-2 border-cyan-600 dark:border-cyan-400 bg-cyan-600 dark:bg-cyan-400 text-white dark:text-slate-950 hover:bg-transparent hover:text-cyan-600 dark:hover:text-cyan-400 hover:border-cyan-600 dark:hover:border-cyan-400 transition-all font-display uppercase tracking-widest text-xs shadow-sm dark:shadow-none">
+                <button type="submit" class="btn btn-primary rounded-none border-2 border-cyan-600 dark:border-cyan-400 bg-cyan-600 dark:bg-cyan-400 text-white dark:text-slate-950 hover:bg-transparent hover:text-cyan-600 dark:hover:text-cyan-400 hover:border-cyan-600 dark:hover:border-cyan-400 transition-all font-display uppercase tracking-widest text-xs shadow-sm dark:shadow-[0_0_15px_rgba(6,182,212,0.3)]">
                     Saqlash
                 </button>
             </div>
-        </form>
-    </div>
-</div>
+            </form>
+            </div>
+
+            @push('scripts')
+            <script src="https://cdn.tiny.cloud/1/9188oi4nsr86nfp7v03t5g4owu8g6wlkfh8eq6clm4zlr6cp/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+            <script>
+            document.addEventListener('livewire:navigated', () => {
+                const initTinyMCE = () => {
+                    if (document.getElementById('article-content')) {
+                        tinymce.init({
+                            selector: '#article-content',
+                            height: 600,
+                            menubar: false,
+                            plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code codesample fullscreen insertdatetime media table wordcount',
+                            toolbar: 'undo redo | blocks | bold italic codesample | bullist numlist | link image table | removeformat | fullscreen code',
+                            skin: document.documentElement.dataset.theme === 'dark' ? 'oxide-dark' : 'oxide',
+                            content_css: document.documentElement.dataset.theme === 'dark' ? 'dark' : 'default',
+                            codesample_languages: [
+                                { text: 'HTML/XML', value: 'markup' },
+                                { text: 'JavaScript', value: 'javascript' },
+                                { text: 'CSS', value: 'css' },
+                                { text: 'PHP', value: 'php' },
+                                { text: 'Python', value: 'python' },
+                                { text: 'SQL', value: 'sql' },
+                                { text: 'Bash', value: 'bash' }
+                            ],
+                            setup: function (editor) {
+                                editor.on('init change', function () {
+                                    editor.save();
+                                });
+                                editor.on('change', function (e) {
+                                    @this.set('content', editor.getContent());
+                                });
+                            }
+                        });
+                    }
+                };
+
+                initTinyMCE();
+
+                // Re-init on Livewire refresh if needed
+                document.addEventListener('livewire:load', initTinyMCE);
+            }, { once: true });
+
+            // Handle cleanup before navigation
+            document.addEventListener('livewire:navigating', () => {
+                if (tinymce.get('article-content')) {
+                    tinymce.get('article-content').remove();
+                }
+            });
+            </script>
+            @endpush
+            </div>
