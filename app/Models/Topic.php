@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\TopicFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,7 +11,7 @@ use Illuminate\Support\Str;
 
 class Topic extends Model
 {
-    /** @use HasFactory<\Database\Factories\TopicFactory> */
+    /** @use HasFactory<TopicFactory> */
     use HasFactory;
 
     protected $fillable = ['subject_id', 'name', 'slug'];
@@ -41,5 +42,10 @@ class Topic extends Model
     public function questions(): HasMany
     {
         return $this->hasMany(Question::class);
+    }
+
+    public function articles(): HasMany
+    {
+        return $this->hasMany(Article::class);
     }
 }

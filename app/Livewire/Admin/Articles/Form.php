@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Articles;
 
 use App\Models\Article;
+use App\Models\Topic;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -19,6 +20,8 @@ class Form extends Component
 
     public $content = '';
 
+    public $topic_id = null;
+
     public $status = 'draft';
 
     public $image;
@@ -32,6 +35,7 @@ class Form extends Component
             $this->title = $article->title;
             $this->slug = $article->slug;
             $this->content = $article->content;
+            $this->topic_id = $article->topic_id;
             $this->status = $article->status;
             $this->existing_image = $article->image;
         }
@@ -50,6 +54,7 @@ class Form extends Component
             'title' => 'required|min:3|max:255',
             'slug' => 'required|min:3|max:255|unique:articles,slug,'.($this->article ? $this->article->id : 'NULL'),
             'content' => 'required|min:10',
+            'topic_id' => 'nullable|exists:topics,id',
             'status' => 'required|in:published,draft',
             'image' => 'nullable|image|max:2048', // 2MB max
         ]);
@@ -64,6 +69,7 @@ class Form extends Component
             'title' => $this->title,
             'slug' => $this->slug,
             'content' => $this->content,
+            'topic_id' => $this->topic_id,
             'status' => $this->status,
             'image' => $imagePath,
             'user_id' => auth()->id() ?? 1, // Fallback for tests if needed, but admin should be auth'd
@@ -82,7 +88,9 @@ class Form extends Component
 
     public function render()
     {
-        return view('livewire.admin.articles.form')
+        return view('livewire.admin.articles.form', [
+            'topics' => Topic::with('subject')->get(),
+        ])
             ->layout('components.layouts.admin');
     }
 }

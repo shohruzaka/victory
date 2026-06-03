@@ -18,6 +18,7 @@ class Article extends Model
         'content',
         'image',
         'user_id',
+        'topic_id',
         'status',
         'views',
     ];
@@ -42,5 +43,15 @@ class Article extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the topic that the article belongs to.
+     *
+     * @return BelongsTo<Topic, $this>
+     */
+    public function topic(): BelongsTo
+    {
+        return $this->belongsTo(Topic::class);
     }
 }

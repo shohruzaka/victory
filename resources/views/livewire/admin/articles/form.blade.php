@@ -29,6 +29,24 @@
                 @error('slug') <span class="text-red-500 text-[10px] font-mono uppercase">{{ $message }}</span> @enderror
             </div>
 
+            <!-- Mavzu (Topic) -->
+            <div class="form-control w-full space-y-2">
+                <label class="label p-0">
+                    <span class="label-text font-display uppercase tracking-widest text-[10px] text-slate-500 dark:text-slate-400 font-bold">Tegishli Mavzu (Ixtiyoriy)</span>
+                </label>
+                <select wire:model="topic_id" class="select select-bordered w-full bg-white dark:bg-slate-900/50 border-slate-200 dark:border-white/10 text-slate-900 dark:text-white focus:border-cyan-600 dark:focus:border-cyan-500 @error('topic_id') border-red-500 dark:border-red-500 @enderror font-display uppercase tracking-wider text-[11px]">
+                    <option value="">-- Mavzuni tanlang --</option>
+                    @foreach($topics->groupBy('subject.name') as $subjectName => $subjectTopics)
+                        <optgroup label="{{ $subjectName }}">
+                            @foreach($subjectTopics as $topic)
+                                <option value="{{ $topic->id }}">{{ $topic->name }}</option>
+                            @endforeach
+                        </optgroup>
+                    @endforeach
+                </select>
+                @error('topic_id') <span class="text-red-500 text-[10px] font-mono uppercase">{{ $message }}</span> @enderror
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Holati -->
                 <div class="form-control w-full space-y-2">
@@ -89,19 +107,37 @@
                             height: 600,
                             menubar: false,
                             plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code codesample fullscreen insertdatetime media table wordcount',
-                            toolbar: 'undo redo | blocks | bold italic codesample | bullist numlist | link image table | removeformat | fullscreen code',
+                            toolbar: 'undo redo | blocks | bold italic codesample inlinecode | bullist numlist | link image table | removeformat | fullscreen code',
                             skin: document.documentElement.dataset.theme === 'dark' ? 'oxide-dark' : 'oxide',
                             content_css: document.documentElement.dataset.theme === 'dark' ? 'dark' : 'default',
                             codesample_languages: [
+                                { text: 'C++', value: 'cpp' },
+                                { text: 'Python', value: 'python' },
                                 { text: 'HTML/XML', value: 'markup' },
                                 { text: 'JavaScript', value: 'javascript' },
                                 { text: 'CSS', value: 'css' },
                                 { text: 'PHP', value: 'php' },
-                                { text: 'Python', value: 'python' },
-                                { text: 'SQL', value: 'sql' },
-                                { text: 'Bash', value: 'bash' }
+                                { text: 'Ruby', value: 'ruby' },
+                                { text: 'Java', value: 'java' },
+                                { text: 'C', value: 'c' },
+                                { text: 'C#', value: 'csharp' },
+    
                             ],
                             setup: function (editor) {
+                                // Inline Code tugmasini yaratish
+                                editor.ui.registry.addButton('inlinecode', {
+                                    icon: 'sourcecode',
+                                    tooltip: 'Inline Code (Ctrl+Shift+C)',
+                                    onAction: function (_) {
+                                        editor.execCommand('mceToggleFormat', false, 'code');
+                                    }
+                                });
+
+                                // Klaviatura shortcutini qo'shish
+                                editor.addShortcut('Meta+Shift+C', 'Inline Code', function () {
+                                    editor.execCommand('mceToggleFormat', false, 'code');
+                                });
+
                                 editor.on('init change', function () {
                                     editor.save();
                                 });

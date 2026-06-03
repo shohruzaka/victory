@@ -17,6 +17,7 @@ use App\Livewire\Student\Dashboard;
 use App\Livewire\Student\Leaderboard;
 use App\Livewire\Student\PublicProfile;
 use App\Livewire\Student\Settings;
+use App\Livewire\Student\Subjects\Show;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -25,6 +26,12 @@ Route::middleware(['auth', 'throttle:arena'])->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/settings', Settings::class)->name('settings');
     Route::get('/leaderboard', Leaderboard::class)->name('leaderboard');
+
+    // Subjects & Articles
+    Route::get('/subjects', App\Livewire\Student\Subjects\Index::class)->name('subjects.index');
+    Route::get('/subjects/{subject:slug}', Show::class)->name('subjects.show');
+    Route::get('/articles/{article:slug}', App\Livewire\Student\Articles\Show::class)->name('articles.show');
+
     Route::get('/arena/setup/{mode}', Setup::class)->name('arena.setup');
     Route::get('/arena/classic', Classic::class)->name('arena.classic');
     Route::get('/arena/speedrun', SpeedRun::class)->name('arena.speedrun');

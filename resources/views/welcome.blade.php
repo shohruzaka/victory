@@ -4,24 +4,24 @@
         <section class="relative py-20 overflow-hidden">
             <div class="flex flex-col items-center text-center space-y-8 animate-reveal">
                 <div class="inline-block px-4 py-1 rounded-full border border-cyan-200 dark:border-cyan-500/30 bg-cyan-50 dark:bg-cyan-500/5 text-cyan-600 dark:text-cyan-400 font-display text-xs tracking-[0.3em] uppercase">
-                    System Online // Version 1.0.0
+                    Neural_Learning_Grid // v1.0.0
                 </div>
                 
-                <h1 class="font-display font-black text-4xl sm:text-6xl md:text-8xl tracking-tighter leading-none">
-                    <span class="block text-slate-900 dark:text-white">LEVEL UP YOUR</span>
-                    <span class="block text-cyan-600 dark:neon-text-cyan dark:text-cyan-400 italic">KNOWLEDGE</span>
+                <h1 class="font-display font-black text-4xl sm:text-6xl md:text-8xl tracking-tighter leading-[0.9]">
+                    <span class="block text-slate-900 dark:text-white">MASTER THE</span>
+                    <span class="block text-cyan-600 dark:neon-text-cyan dark:text-cyan-400 italic">CORE THEORY</span>
                 </h1>
                 
                 <p class="max-w-2xl text-lg text-slate-600 dark:text-slate-400 font-light leading-relaxed">
-                    Enter the ultimate gamified learning arena. Master C++, OOP, and Algorithms through high-stakes duels and survival challenges.
+                    C++, OOP va algoritmlarni  nazariy materiallar orqali o'rganing va o'z bilimlaringizni arenada sinab ko'ring.
                 </p>
 
                 <div class="flex flex-wrap items-center justify-center gap-6 pt-4">
-                    <a href="{{ auth()->check() ? route('dashboard') : route('register') }}" class="btn btn-lg px-12 rounded-none border-2 border-cyan-600 dark:border-cyan-400 bg-cyan-600 dark:bg-cyan-400 text-white dark:text-slate-950 hover:bg-transparent hover:text-cyan-600 dark:hover:text-cyan-400 hover:border-cyan-600 dark:hover:border-cyan-400 transition-all duration-300 font-display uppercase tracking-[0.2em] shadow-md dark:shadow-[0_0_30px_rgba(34,211,238,0.4)]">
-                        Enter Arena
+                    <a href="#knowledge-base" class="btn btn-lg px-12 rounded-none border-2 border-cyan-600 dark:border-cyan-400 bg-cyan-600 dark:bg-cyan-400 text-white dark:text-slate-950 hover:bg-transparent hover:text-cyan-600 dark:hover:text-cyan-400 hover:border-cyan-600 dark:hover:border-cyan-400 transition-all duration-300 font-display uppercase tracking-[0.2em] shadow-md dark:shadow-[0_0_30px_rgba(34,211,238,0.4)]">
+                        Nazariy ma'lumotlar
                     </a>
                     <a href="#modes" class="btn btn-lg px-12 rounded-none border-2 border-slate-200 dark:border-white/20 bg-transparent text-slate-600 dark:text-white hover:border-slate-900 dark:hover:border-white transition-all duration-300 font-display uppercase tracking-[0.2em]">
-                        Select Mode
+                        Arena rejimlari
                     </a>
                 </div>
             </div>
@@ -31,11 +31,73 @@
             <div class="absolute bottom-1/4 right-0 w-96 h-[1px] bg-gradient-to-r from-transparent via-fuchsia-500/50 to-transparent -rotate-12 hidden dark:block"></div>
         </section>
 
-        <!-- Game Modes Grid -->
-        <section id="modes">
-            <div class="flex flex-col items-center mb-12 space-y-4">
-                <h2 class="font-display text-4xl font-bold uppercase tracking-widest text-slate-900 dark:text-white">Select <span class="text-cyan-600 dark:text-cyan-400">Mode</span></h2>
+        <!-- Cyber Academy Section (Minimalist & Focused) -->
+        <section id="knowledge-base" class="scroll-mt-32">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
+                <div class="space-y-3">
+                    <p class="font-mono text-[10px] uppercase tracking-[0.4em] text-cyan-600 dark:text-cyan-500">Learning_Grid</p>
+                    <h2 class="font-display text-5xl font-black uppercase tracking-tight text-slate-900 dark:text-white leading-none">
+                        Cyber <span class="text-cyan-600 dark:text-cyan-400 italic">Academy</span>
+                    </h2>
+                    <p class="max-w-md text-slate-500 dark:text-slate-400 font-sans text-base leading-relaxed">
+                        Nazariy bilimlar va amaliyotning mukammal uyg'unligi. Dasturlashni tizimli o'rganish uchun.
+                    </p>
+                </div>
+                
+                <a href="{{ route('subjects.index') }}" class="group inline-flex items-center gap-4 font-display text-[10px] font-black uppercase tracking-[0.3em] text-slate-900 dark:text-white border-b-2 border-slate-200 dark:border-white/10 pb-2 transition-all hover:border-cyan-600 dark:hover:border-cyan-400">
+                    Barcha Fanlar
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                @foreach($subjects as $subject)
+                    <a href="{{ route('subjects.show', $subject->slug) }}" class="group relative block transition-all duration-500">
+                        <div class="space-y-6">
+                            <!-- Stats Line -->
+                            <div class="flex items-center gap-4 font-mono text-[9px] uppercase tracking-[0.3em] text-cyan-600 dark:text-cyan-500">
+                                <span>{{ $subject->topics_count }} Mavzu</span>
+                                <span class="w-8 h-[1px] bg-slate-200 dark:bg-white/10"></span>
+                                <span class="text-slate-400 dark:text-slate-600">{{ $subject->articles_count }} Maqola</span>
+                            </div>
+
+                            <!-- Content -->
+                            <div class="space-y-4">
+                                <h3 class="font-display text-4xl font-black text-slate-900 dark:text-white uppercase tracking-tighter group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors duration-300">
+                                    {{ $subject->name }}
+                                </h3>
+                                <p class="text-slate-500 dark:text-slate-400 leading-relaxed max-w-lg line-clamp-2">
+                                    {{ $subject->name }} bo'yicha asosiy nazariy tushunchalar va tizimli o'quv materiallari jamlangan o'quv moduli.
+                                </p>
+                            </div>
+
+                            <!-- Action -->
+                            <div class="inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                                <span>O'rganishni boshlash</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-2 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Minimal Separator -->
+                        <div class="absolute -bottom-6 left-0 w-full h-[1px] bg-slate-100 dark:bg-white/5"></div>
+                    </a>
+                @endforeach
+            </div>
+        </section>
+
+        <!-- Arena Game Modes Section -->
+        <section id="modes" class="scroll-mt-32">
+            <div class="flex flex-col items-center mb-16 space-y-4 text-center">
+                <div class="font-mono text-[10px] uppercase tracking-[0.4em] text-fuchsia-600 dark:text-fuchsia-500">Battle_Simulation</div>
+                <h2 class="font-display text-4xl font-black uppercase tracking-widest text-slate-900 dark:text-white">Cyber <span class="text-cyan-600 dark:text-cyan-400">Arena</span></h2>
                 <div class="h-1 w-24 bg-gradient-to-r from-cyan-600 to-fuchsia-600 dark:from-cyan-500 dark:to-fuchsia-500"></div>
+                <p class="max-w-xl text-sm text-slate-500 dark:text-slate-400 font-mono uppercase tracking-widest leading-relaxed">
+                    O'rgangan bilimlaringizni amalda sinab ko'ring va reytingda yuqoriga ko'tariling.
+                </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
