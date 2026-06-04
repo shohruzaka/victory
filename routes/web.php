@@ -30,6 +30,7 @@ Route::middleware(['auth', 'throttle:arena'])->group(function () {
     // Subjects & Articles
     Route::get('/subjects', App\Livewire\Student\Subjects\Index::class)->name('subjects.index');
     Route::get('/subjects/{subject:slug}', Show::class)->name('subjects.show');
+    Route::get('/library', App\Livewire\Student\Articles\Index::class)->name('articles.index');
     Route::get('/articles/{article:slug}', App\Livewire\Student\Articles\Show::class)->name('articles.show');
 
     Route::get('/arena/setup/{mode}', Setup::class)->name('arena.setup');

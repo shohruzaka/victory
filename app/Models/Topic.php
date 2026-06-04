@@ -14,7 +14,7 @@ class Topic extends Model
     /** @use HasFactory<TopicFactory> */
     use HasFactory;
 
-    protected $fillable = ['subject_id', 'name', 'slug'];
+    protected $fillable = ['subject_id', 'name', 'slug', 'description', 'icon'];
 
     protected static function boot()
     {

@@ -7,6 +7,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('favicon.png') }}">
+
     <!-- SEO Meta Tags -->
     <title>{{ $title ?? 'CyberArena | Level Up Your Programming Skills' }}</title>
     <meta name="description" content="CyberArena - Gamified learning platform for programming. Master C++, OOP, and Algorithms through high-stakes duels and survival challenges.">
@@ -58,6 +62,7 @@
 
                 <div class="hidden md:flex items-center gap-8 font-display font-medium uppercase tracking-widest text-sm text-slate-600 dark:text-slate-200">
                     <a href="{{ route('subjects.index') }}" class="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors {{ request()->routeIs('subjects.*') ? 'text-cyan-600 dark:text-cyan-400' : '' }}">Fanlar</a>
+                    <a href="{{ route('articles.index') }}" class="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors {{ request()->routeIs('articles.index') ? 'text-cyan-600 dark:text-cyan-400' : '' }}">Kutubxona</a>
                     <a href="{{ auth()->check() ? route('dashboard') : '#modes' }}" class="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">Games</a>
                     <a href="{{ route('leaderboard') }}" class="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors {{ request()->routeIs('leaderboard') ? 'text-cyan-600 dark:text-cyan-400' : '' }}">Leaderboard</a>
                     <a href="{{ route('dashboard') }}" class="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors {{ request()->routeIs('dashboard') ? 'text-cyan-600 dark:text-cyan-400' : '' }}">Arena</a>
